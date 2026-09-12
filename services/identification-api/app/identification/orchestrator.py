@@ -267,6 +267,13 @@ class IdentificationOrchestrator:
 
         merged = merge_candidates(candidates)
         for candidate in merged:
+            suggested_scope = candidate.get("suggested_scope")
+            evidence_json = dict(candidate.get("evidence_json") or {})
+            if suggested_scope and len(str(suggested_scope)) > 20:
+                evidence_json["scope_review_status"] = suggested_scope
+                suggested_scope = taxonomy.get(candidate["source_key"], {}).get(
+                    "default_scope"
+                )
             self.db.add(
                 SourceCandidate(
                     assessment_id=assessment_id,
@@ -276,12 +283,12 @@ class IdentificationOrchestrator:
                     source_key=candidate["source_key"],
                     source_name=candidate["source_name"],
                     source_category=candidate.get("source_category"),
-                    suggested_scope=candidate.get("suggested_scope"),
+                    suggested_scope=suggested_scope,
                     origin=candidate["origin"],
                     reason=candidate.get("reason"),
                     confidence=candidate.get("confidence"),
                     status=candidate["status"],
-                    evidence_json=candidate.get("evidence_json"),
+                    evidence_json=evidence_json,
                 )
             )
 
