@@ -14,14 +14,17 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.identification.candidate_merger import merge_candidates
+from app.identification.candidate_merger import group_candidates_by_source, merge_candidates
+from app.identification.checklist import build_contextual_checklist
 from app.identification.ml_adapter import MLAdapter
 from app.identification.rule_engine import RuleEngine
 from app.persistence.models import (
     Assessment,
+    ActivityRecord,
     IdentificationRun,
     ProcessStep,
     SourceCandidate,
+    SourceInventoryItem,
 )
 
 ROOT = Path(__file__).resolve().parents[4]
@@ -67,48 +70,42 @@ class IdentificationOrchestrator:
 
     def _checklist(
         self,
-        assessment_id: UUID,
+        assessment: Assessment,
         candidates: list[dict[str, Any]],
-        processes: list[ProcessStep],
         taxonomy: dict[str, dict[str, Any]],
+        template: dict[str, Any],
+        inventory: list[SourceInventoryItem] | None = None,
+        activity_source_ids: set[UUID] | None = None,
     ) -> list[dict[str, Any]]:
         universal = json.loads(
             (ROOT / "data" / "industry-templates" / "universal.json").read_text(
                 encoding="utf-8"
             )
         ).get("universal_source_type_ids", [])
-        observed = {candidate.get("source_key") for candidate in candidates}
-        outsourced = [
-            str(process.id)
-            for process in processes
-            if str(process.is_outsourced).upper() == "YES"
-        ]
-        result = []
-        for source_key in universal:
-            is_outsourced = source_key == "outsourced_manufacturing" and bool(outsourced)
-            is_observed = source_key in observed
-            result.append(
-                {
-                    "assessment_id": str(assessment_id),
-                    "source_key": source_key,
-                    "label": taxonomy.get(source_key, {}).get("name", source_key),
-                    "status": "OUTSOURCED" if is_outsourced else ("POTENTIAL" if is_observed else "MISSING_INFORMATION"),
-                    "required_fields": taxonomy.get(source_key, {}).get(
-                        "minimum_data", ["activity_quantity", "activity_unit", "reporting_period"]
-                    ),
-                    "reason": (
-                        "Outsourced process activity is present; retain this as a value-chain candidate."
-                        if is_outsourced
-                        else (
-                            "A candidate was identified from reported facts."
-                            if is_observed
-                            else "No evidence was reported; collect information rather than treating it as zero."
-                        )
-                    ),
-                    "metadata": {"outsourced_process_ids": outsourced} if outsourced else None,
-                }
-            )
-        return result
+        return build_contextual_checklist(
+            assessment=assessment,
+            taxonomy=taxonomy,
+            universal_source_keys=universal,
+            template=template,
+            candidates=candidates,
+            inventory=inventory or [],
+            activity_source_ids=activity_source_ids or set(),
+        )
+
+    async def build_current_checklist(self, assessment_id: UUID) -> list[dict[str, Any]]:
+        """Evaluate master coverage against live assessment, review and activity data."""
+        assessment = await self._load_assessment(assessment_id)
+        template = self._template(assessment.industry_template_key) if assessment.industry_template_key else None
+        candidates = list((await self.db.execute(select(SourceCandidate).where(SourceCandidate.assessment_id == assessment_id))).scalars().all())
+        inventory = list((await self.db.execute(select(SourceInventoryItem).where(SourceInventoryItem.assessment_id == assessment_id))).scalars().all())
+        activity_source_ids = set(
+            (await self.db.execute(
+                select(ActivityRecord.source_inventory_item_id)
+                .join(SourceInventoryItem)
+                .where(SourceInventoryItem.assessment_id == assessment_id)
+            )).scalars().all()
+        )
+        return self._checklist(assessment, candidates, self._taxonomy(), template or {}, inventory, activity_source_ids)
 
     async def _load_assessment(self, assessment_id: UUID) -> Assessment:
         statement = (
@@ -265,7 +262,7 @@ class IdentificationOrchestrator:
                 ml_status = "UNAVAILABLE"
                 ml_error = str(exc)
 
-        merged = merge_candidates(candidates)
+        merged = group_candidates_by_source(merge_candidates(candidates))
         for candidate in merged:
             suggested_scope = candidate.get("suggested_scope")
             evidence_json = dict(candidate.get("evidence_json") or {})
@@ -312,7 +309,7 @@ class IdentificationOrchestrator:
             "checklist_candidate_count": counts["CHECKLIST"],
             "user_candidate_count": counts["USER"],
             "ml_status": ml_status,
-            "checklist": self._checklist(assessment_id, candidates, assessment.process_steps, taxonomy),
+            "checklist": self._checklist(assessment, merged, taxonomy, template),
             **({"ml_error": ml_error} if ml_error else {}),
         }
         await self.db.flush()

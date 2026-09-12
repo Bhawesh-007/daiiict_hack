@@ -1,27 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { api } from "@/lib/api-client";
 import Nav from "@/app/components/Nav";
 
+type CalculationLine = {
+  source_name?: string | null;
+  source_category?: string | null;
+  scope?: string | null;
+  process_name?: string | null;
+  emissions_kgco2e?: string | number | null;
+};
+
 type Summary = {
-  quantified_total_emissions_kgco2e?: string;
-  total_status?: string;
-  quantified_line_count?: number;
-  emissions_intensity_kgco2e_per_production_unit?: string | null;
-  by_scope?: Array<{ key: string; emissions_kgco2e: string; percentage: string }>;
-  by_source?: Array<{ key: string; label?: string; emissions_kgco2e: string; percentage: string }>;
-  by_category?: Array<{ key: string; label?: string; emissions_kgco2e: string; percentage: string }>;
-  by_process?: Array<{ key: string; label?: string; emissions_kgco2e: string; percentage: string }>;
+  line_items?: CalculationLine[];
+  is_partial?: boolean;
+  unquantified_sources?: string[];
 };
 
 type CalculationResponse = {
   calculation_run_id: string;
   status: string;
   total_emissions_kgco2e: string;
+  total_emissions_tco2e?: string;
   summary: Summary;
-  lines: Array<{ id: string; emissions_kgco2e: string; source_category?: string; scope?: string }>;
+  lines: CalculationLine[];
 };
 
 type FinalProfileResponse = {
@@ -35,16 +39,42 @@ function Metric({ label, value, note }: { label: string; value: string; note?: s
   return <div className="metric"><span>{label}</span><strong>{value}</strong>{note && <small>{note}</small>}</div>;
 }
 
-const COLORS = ["#176b45", "#35a46b", "#e3a93b", "#4c78a8", "#b85c8a", "#7c62a8"];
+function aggregate(lines: CalculationLine[], getKey: (line: CalculationLine) => string | null | undefined, total: number): AggregateItem[] {
+  const values = new Map<string, { label: string; value: number }>();
+  for (const line of lines) {
+    const rawKey = getKey(line);
+    const value = Number(line.emissions_kgco2e ?? 0);
+    if (!rawKey || !Number.isFinite(value) || value <= 0) continue;
+    const key = rawKey.trim();
+    const current = values.get(key) || { label: key, value: 0 };
+    current.value += value;
+    values.set(key, current);
+  }
+  return Array.from(values.entries())
+    .map(([key, item]) => ({ key, label: key.includes("_") ? pretty(item.label) : item.label, value: item.value, percentage: total > 0 ? (item.value / total) * 100 : 0 }))
+    .sort((a, b) => b.value - a.value);
+}
 
-function PieChart({ title, items }: { title: string; items: Array<{ key: string; label?: string; percentage: string }> }) {
-  const visible = items.filter(item => Number(item.percentage) > 0);
-  let cursor = 0;
-  const stops = visible.map((item, index) => {
-    const start = cursor; cursor += Number(item.percentage);
-    return `${COLORS[index % COLORS.length]} ${start}% ${cursor}%`;
-  });
-  return <div className="pie-card"><h3>{title}</h3>{visible.length ? <div className="pie-layout"><div className="pie" style={{ background: `conic-gradient(${stops.join(", ")})` }}><div className="pie-hole"><strong>{Math.round(visible.reduce((sum, item) => sum + Number(item.percentage), 0))}%</strong><small>quantified</small></div></div><div className="legend">{visible.map((item, index) => <div className="legend-row" key={item.key}><i style={{ background: COLORS[index % COLORS.length] }} /><span>{item.label || item.key}</span><b>{Number(item.percentage).toFixed(1)}%</b></div>)}</div></div> : <p className="muted">No quantified data yet.</p>}</div>;
+function collapseSmallSlices(items: AggregateItem[], maxSlices = 6): AggregateItem[] {
+  if (items.length <= maxSlices) return items;
+  const visible = items.slice(0, maxSlices);
+  const otherValue = items.slice(maxSlices).reduce((sum, item) => sum + item.value, 0);
+  const total = items.reduce((sum, item) => sum + item.value, 0);
+  return [...visible, { key: "other", label: "Other", value: otherValue, percentage: total ? (otherValue / total) * 100 : 0 }];
+}
+
+function DonutChart({ title, items, large = false }: { title: string; items: AggregateItem[]; large?: boolean }) {
+  const visible = collapseSmallSlices(items);
+  const total = visible.reduce((sum, item) => sum + item.value, 0);
+  const radius = large ? 82 : 65;
+  const circumference = 2 * Math.PI * radius;
+  let offset = 0;
+  return <div className={`visual-card ${large ? "visual-card-large" : ""}`}><h3>{title}</h3>{visible.length ? <div className="donut-layout"><div className={`donut ${large ? "donut-large" : ""}`}><svg viewBox="0 0 220 220" role="img" aria-label={title}><circle className="donut-track" cx="110" cy="110" r={radius} />{visible.map((item, index) => { const length = total ? (item.value / total) * circumference : 0; const circle = <circle key={item.key} cx="110" cy="110" r={radius} fill="none" stroke={COLORS[index % COLORS.length]} strokeWidth={large ? 26 : 22} strokeDasharray={`${length} ${circumference - length}`} strokeDashoffset={-offset} transform="rotate(-90 110 110)"><title>{`${item.label}: ${kg(item.value)} · ${item.percentage.toFixed(1)}%`}</title></circle>; offset += length; return circle; })}</svg><div className="donut-center"><strong>{(total / 1000).toLocaleString(undefined, { maximumFractionDigits: 1 })}</strong><small>tCO₂e</small></div></div><div className="legend">{visible.map((item, index) => <div className="legend-row" key={item.key}><i style={{ background: COLORS[index % COLORS.length] }} /><span>{item.label}</span><b>{item.percentage.toFixed(1)}%</b></div>)}</div></div> : <p className="muted">No quantified data yet.</p>}</div>;
+}
+
+function BarChart({ title, items, unavailableMessage }: { title: string; items: AggregateItem[]; unavailableMessage?: string }) {
+  const max = items[0]?.value || 0;
+  return <div className="visual-card bar-chart-card"><h3>{title}</h3>{items.length ? <div className="bars">{items.map(item => <div className="bar-row" key={item.key}><div className="bar-label"><span>{item.label}</span><b>{tonnes(item.value)}</b></div><div className="track"><div className="bar" style={{ width: `${max ? (item.value / max) * 100 : 0}%` }} /></div><small>{item.percentage.toFixed(1)}% of quantified emissions</small></div>)}</div> : <p className="muted">{unavailableMessage || "No quantified data yet."}</p>}</div>;
 }
 
 export default function CalculationsPage() {
@@ -80,7 +110,7 @@ export default function CalculationsPage() {
   const sources = summary?.by_source ?? [];
 
   return <main><Nav />
-    <div className="topbar"><div><p className="eyebrow">EMISSIONLENS · LAYER 1</p><h1>Calculation summary</h1><p>Turn reviewed activity data into a transparent, versioned emissions snapshot.</p></div><Link className="secondary-link" href="/">Activity data →</Link></div>
+    <div className="topbar"><div><p className="eyebrow">Calculation results</p><h1>Emissions baseline</h1><p>Every chart below is derived from the quantified calculation lines returned by the backend.</p></div><Link className="secondary-link" href="/workflow">Source review →</Link></div>
     <section className="control card"><label>Assessment ID<input aria-label="Assessment ID" value={assessmentId} onChange={event => setAssessmentId(event.target.value)} /></label><button onClick={calculate} disabled={!assessmentId.trim()}>Run calculation</button></section>
     {message && <div className={message.includes("complete") ? "notice success" : "notice"}>{message}</div>}
     {!result && <section className="empty card"><div className="empty-icon">∑</div><h2>Ready to calculate</h2><p>Confirm source inventory and save activity data first. The calculation engine will normalize compatible units, resolve active factors, and keep unresolved lines visible as gaps.</p></section>}
