@@ -1,0 +1,140 @@
+{
+  "schema_version": "1.0.0",
+  "template_id": "industry-universal-v1",
+  "template_version": "1.0.0",
+  "industry_code": "other",
+  "name": "Universal industrial source checklist",
+  "status": "DEMO_ACTIVE",
+  "description": "Fallback template for any industrial facility. Loading this template creates editable process suggestions and POTENTIAL source candidates only.",
+  "candidate_default_status": "POTENTIAL",
+  "processes": [
+    {
+      "process_id": "raw_material_receipt",
+      "name": "Raw material receipt and storage",
+      "sequence": 10,
+      "optional": false,
+      "typical_equipment_types": ["forklift", "conveyor", "storage_tank", "warehouse"],
+      "typical_input_types": ["raw_material", "packaging", "purchased_electricity", "vehicle_fuel"],
+      "typical_output_types": ["damaged_material", "packaging_waste"],
+      "suggested_source_type_ids": ["purchased_materials", "upstream_transportation", "mobile_fuel_combustion"]
+    },
+    {
+      "process_id": "manufacturing",
+      "name": "Manufacturing or processing",
+      "sequence": 20,
+      "optional": false,
+      "typical_equipment_types": ["boiler", "furnace", "oven", "dryer", "motor", "pump", "compressor", "production_machine"],
+      "typical_input_types": ["purchased_electricity", "fuel", "raw_material", "chemical", "water"],
+      "typical_output_types": ["product", "by_product", "solid_waste", "wastewater", "air_release"],
+      "suggested_source_type_ids": ["stationary_fuel_combustion", "purchased_grid_electricity", "industrial_process_emissions", "purchased_materials"]
+    },
+    {
+      "process_id": "cooling_and_refrigeration",
+      "name": "Cooling, refrigeration or air conditioning",
+      "sequence": 30,
+      "optional": true,
+      "typical_equipment_types": ["refrigeration_system", "cold_room", "chiller", "air_conditioner", "cooling_tower"],
+      "typical_input_types": ["purchased_electricity", "refrigerant", "water"],
+      "typical_output_types": ["refrigerant_release", "wastewater"],
+      "suggested_source_type_ids": ["purchased_grid_electricity", "refrigerant_fugitive_emissions"]
+    },
+    {
+      "process_id": "utilities",
+      "name": "Utilities and backup power",
+      "sequence": 40,
+      "optional": true,
+      "typical_equipment_types": ["generator", "boiler", "transformer", "compressor", "water_treatment_system"],
+      "typical_input_types": ["fuel", "purchased_electricity", "water", "chemical"],
+      "typical_output_types": ["combustion_exhaust", "waste_oil", "sludge"],
+      "suggested_source_type_ids": ["stationary_fuel_combustion", "purchased_grid_electricity"]
+    },
+    {
+      "process_id": "waste_and_wastewater",
+      "name": "Waste and wastewater handling",
+      "sequence": 50,
+      "optional": false,
+      "typical_equipment_types": ["effluent_treatment_plant", "septic_system", "waste_compactor", "storage_bin"],
+      "typical_input_types": ["wastewater", "solid_waste", "treatment_chemical", "purchased_electricity"],
+      "typical_output_types": ["treated_effluent", "sludge", "recyclable_waste", "disposed_waste"],
+      "suggested_source_type_ids": ["waste_generated_in_operations", "onsite_wastewater_treatment", "offsite_wastewater_treatment"]
+    },
+    {
+      "process_id": "dispatch",
+      "name": "Packaging, warehousing and dispatch",
+      "sequence": 60,
+      "optional": false,
+      "typical_equipment_types": ["packaging_machine", "forklift", "company_vehicle", "third_party_vehicle"],
+      "typical_input_types": ["packaging", "purchased_electricity", "vehicle_fuel"],
+      "typical_output_types": ["packaged_product", "packaging_waste"],
+      "suggested_source_type_ids": ["purchased_materials", "mobile_fuel_combustion", "downstream_transportation"]
+    }
+  ],
+  "verification_questions": [
+    {
+      "question_id": "UNI-Q-001",
+      "prompt": "Which fuels are burned onsite, in which equipment, and who controls that equipment?",
+      "required_for_source_type_ids": ["stationary_fuel_combustion"]
+    },
+    {
+      "question_id": "UNI-Q-002",
+      "prompt": "Does the facility purchase electricity, heat, steam or cooling, and are complete records available for the reporting period?",
+      "required_for_source_type_ids": ["purchased_grid_electricity", "purchased_heat_steam_cooling"]
+    },
+    {
+      "question_id": "UNI-Q-003",
+      "prompt": "Which vehicles and mobile machines are owned or operationally controlled by the company?",
+      "required_for_source_type_ids": ["mobile_fuel_combustion"]
+    },
+    {
+      "question_id": "UNI-Q-004",
+      "prompt": "Can any onsite physical, chemical or biological process directly release a greenhouse gas apart from fuel combustion?",
+      "required_for_source_type_ids": ["industrial_process_emissions"]
+    },
+    {
+      "question_id": "UNI-Q-005",
+      "prompt": "Which refrigerants or other greenhouse gases are contained in facility equipment, and were any added, removed or released during the reporting period?",
+      "required_for_source_type_ids": ["refrigerant_fugitive_emissions", "other_fugitive_emissions"]
+    },
+    {
+      "question_id": "UNI-Q-006",
+      "prompt": "Which major raw materials, packaging items and chemicals are purchased, and what quantities are available?",
+      "required_for_source_type_ids": ["purchased_materials"]
+    },
+    {
+      "question_id": "UNI-Q-007",
+      "prompt": "Which inbound or outbound transport activities use third-party carriers, and who arranges and pays for each service?",
+      "required_for_source_type_ids": ["upstream_transportation", "downstream_transportation"]
+    },
+    {
+      "question_id": "UNI-Q-008",
+      "prompt": "What waste streams are generated, in what quantities, and what final treatment routes are verified?",
+      "required_for_source_type_ids": ["waste_generated_in_operations"]
+    },
+    {
+      "question_id": "UNI-Q-009",
+      "prompt": "Is wastewater treated onsite, offsite or both, and what treatment process, volume and discharge route apply?",
+      "required_for_source_type_ids": ["onsite_wastewater_treatment", "offsite_wastewater_treatment"]
+    },
+    {
+      "question_id": "UNI-Q-010",
+      "prompt": "Are any manufacturing, packaging, washing, maintenance or treatment operations outsourced?",
+      "required_for_source_type_ids": ["outsourced_manufacturing"]
+    }
+  ],
+  "universal_source_type_ids": [
+    "stationary_fuel_combustion",
+    "mobile_fuel_combustion",
+    "purchased_grid_electricity",
+    "purchased_heat_steam_cooling",
+    "industrial_process_emissions",
+    "refrigerant_fugitive_emissions",
+    "other_fugitive_emissions",
+    "purchased_materials",
+    "upstream_transportation",
+    "downstream_transportation",
+    "waste_generated_in_operations",
+    "onsite_wastewater_treatment",
+    "offsite_wastewater_treatment",
+    "outsourced_manufacturing"
+  ]
+}

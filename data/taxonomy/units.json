@@ -1,0 +1,123 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_id": "supported-units",
+  "version": "2026.1-demo",
+  "last_reviewed": "2026-09-12",
+  "description": "Supported units and multiplicative conversions. Original quantities and units must always be preserved. Conversions requiring density, temperature, pressure or fuel properties are intentionally excluded.",
+  "dimensions": [
+    {
+      "dimension_id": "electricity",
+      "base_unit": "kWh",
+      "units": [
+        {"unit_id": "Wh", "symbol": "Wh", "aliases": ["watt-hour", "watt hours"], "to_base_multiplier": 0.001},
+        {"unit_id": "kWh", "symbol": "kWh", "aliases": ["kilowatt-hour", "kilowatt hours", "units of electricity"], "to_base_multiplier": 1},
+        {"unit_id": "MWh", "symbol": "MWh", "aliases": ["megawatt-hour", "megawatt hours"], "to_base_multiplier": 1000},
+        {"unit_id": "GWh", "symbol": "GWh", "aliases": ["gigawatt-hour", "gigawatt hours"], "to_base_multiplier": 1000000}
+      ]
+    },
+    {
+      "dimension_id": "energy",
+      "base_unit": "MJ",
+      "units": [
+        {"unit_id": "MJ", "symbol": "MJ", "aliases": ["megajoule", "megajoules"], "to_base_multiplier": 1},
+        {"unit_id": "GJ", "symbol": "GJ", "aliases": ["gigajoule", "gigajoules"], "to_base_multiplier": 1000},
+        {"unit_id": "TJ", "symbol": "TJ", "aliases": ["terajoule", "terajoules"], "to_base_multiplier": 1000000}
+      ]
+    },
+    {
+      "dimension_id": "mass",
+      "base_unit": "kg",
+      "units": [
+        {"unit_id": "g", "symbol": "g", "aliases": ["gram", "grams"], "to_base_multiplier": 0.001},
+        {"unit_id": "kg", "symbol": "kg", "aliases": ["kilogram", "kilograms", "kgs"], "to_base_multiplier": 1},
+        {"unit_id": "tonne", "symbol": "t", "aliases": ["metric tonne", "metric ton", "tonnes", "MT"], "to_base_multiplier": 1000}
+      ]
+    },
+    {
+      "dimension_id": "liquid_volume",
+      "base_unit": "litre",
+      "units": [
+        {"unit_id": "millilitre", "symbol": "mL", "aliases": ["ml", "millilitres", "milliliters"], "to_base_multiplier": 0.001},
+        {"unit_id": "litre", "symbol": "L", "aliases": ["liter", "litres", "liters", "ltr"], "to_base_multiplier": 1},
+        {"unit_id": "kilolitre", "symbol": "kL", "aliases": ["kiloliter", "kilolitres", "kiloliters"], "to_base_multiplier": 1000}
+      ]
+    },
+    {
+      "dimension_id": "standard_gas_volume",
+      "base_unit": "normal_cubic_metre",
+      "reference_conditions_required": true,
+      "units": [
+        {"unit_id": "normal_cubic_metre", "symbol": "Nm3", "aliases": ["normal cubic meter", "normal cubic metre", "normal cubic meters", "normal cubic metres"], "to_base_multiplier": 1}
+      ]
+    },
+    {
+      "dimension_id": "distance",
+      "base_unit": "km",
+      "units": [
+        {"unit_id": "m", "symbol": "m", "aliases": ["metre", "meter", "metres", "meters"], "to_base_multiplier": 0.001},
+        {"unit_id": "km", "symbol": "km", "aliases": ["kilometre", "kilometer", "kilometres", "kilometers"], "to_base_multiplier": 1},
+        {"unit_id": "mile", "symbol": "mi", "aliases": ["miles"], "to_base_multiplier": 1.609344}
+      ]
+    },
+    {
+      "dimension_id": "transport_work",
+      "base_unit": "tonne_km",
+      "units": [
+        {"unit_id": "kg_km", "symbol": "kg-km", "aliases": ["kilogram-kilometre", "kilogram-kilometer"], "to_base_multiplier": 0.001},
+        {"unit_id": "tonne_km", "symbol": "t-km", "aliases": ["tonne-km", "tonne kilometre", "tonne kilometer"], "to_base_multiplier": 1}
+      ]
+    },
+    {
+      "dimension_id": "passenger_transport_work",
+      "base_unit": "passenger_km",
+      "units": [
+        {"unit_id": "passenger_km", "symbol": "pkm", "aliases": ["passenger-kilometre", "passenger-kilometer"], "to_base_multiplier": 1}
+      ]
+    },
+    {
+      "dimension_id": "water_volume",
+      "base_unit": "cubic_metre",
+      "units": [
+        {"unit_id": "litre_water", "symbol": "L", "aliases": ["litre of water", "liter of water"], "to_base_multiplier": 0.001},
+        {"unit_id": "kilolitre_water", "symbol": "kL", "aliases": ["kilolitre of water", "kiloliter of water", "KL water"], "to_base_multiplier": 1},
+        {"unit_id": "cubic_metre", "symbol": "m3", "aliases": ["cubic meter", "cubic metres", "cubic meters"], "to_base_multiplier": 1}
+      ]
+    },
+    {
+      "dimension_id": "emissions_mass",
+      "base_unit": "kg_co2e",
+      "units": [
+        {"unit_id": "kg_co2e", "symbol": "kgCO2e", "aliases": ["kg CO2e", "kg CO2 equivalent"], "to_base_multiplier": 1},
+        {"unit_id": "t_co2e", "symbol": "tCO2e", "aliases": ["tonne CO2e", "metric tonne CO2e"], "to_base_multiplier": 1000}
+      ]
+    },
+    {
+      "dimension_id": "count",
+      "base_unit": "unit",
+      "units": [
+        {"unit_id": "unit", "symbol": "unit", "aliases": ["units", "item", "items", "piece", "pieces"], "to_base_multiplier": 1}
+      ]
+    },
+    {
+      "dimension_id": "time",
+      "base_unit": "hour",
+      "units": [
+        {"unit_id": "hour", "symbol": "h", "aliases": ["hours", "hr", "hrs"], "to_base_multiplier": 1}
+      ]
+    }
+  ],
+  "conversion_rules": {
+    "allow_only_within_same_dimension": true,
+    "formula": "normalized_quantity = original_quantity * to_base_multiplier",
+    "negative_quantities_allowed": false,
+    "preserve_original_value": true,
+    "cross_dimension_conversion": "Requires a separately sourced and versioned material-specific conversion factor.",
+    "rounding": "ROUND_FOR_DISPLAY_ONLY"
+  },
+  "references": [
+    {
+      "title": "BIPM SI Brochure",
+      "url": "https://www.bipm.org/en/publications/si-brochure/"
+    }
+  ]
+}

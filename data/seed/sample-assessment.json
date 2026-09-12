@@ -1,0 +1,47 @@
+{
+  "seed_version": "1.0.0",
+  "company": {
+    "id": "10000000-0000-4000-8000-000000000001",
+    "name": "Sunrise Foods and Cold Chain Pvt. Ltd.",
+    "msme_category": "MEDIUM",
+    "registration_number": null,
+    "contact_email": null,
+    "contact_phone": null,
+    "address": "Ahmedabad, Gujarat, India"
+  },
+  "facility": {
+    "id": "10000000-0000-4000-8000-000000000002",
+    "company_id": "10000000-0000-4000-8000-000000000001",
+    "name": "Ahmedabad manufacturing facility",
+    "location": "Ahmedabad, Gujarat, India",
+    "city": "Ahmedabad",
+    "state": "Gujarat",
+    "country": "India",
+    "grid_region": "WESTERN_REGION",
+    "ownership_type": "OWNED",
+    "latitude": null,
+    "longitude": null
+  },
+  "assessment": {
+    "id": "10000000-0000-4000-8000-000000000003",
+    "facility_id": "10000000-0000-4000-8000-000000000002",
+    "industry_name": "Food processing",
+    "industry_code": "food_processing",
+    "industry_template_key": "industry-food-processing-v1",
+    "industry_template_version": "1.0.0",
+    "reporting_period_start": "2025-04-01T00:00:00+05:30",
+    "reporting_period_end": "2026-03-31T23:59:59+05:30",
+    "organizational_boundary": "OPERATIONAL_CONTROL",
+    "operational_boundary": "SCOPE_1_SCOPE_2_SELECTED_SCOPE_3",
+    "status": "DRAFT"
+  },
+  "products": [
+    {
+      "id": "10000000-0000-4000-8000-000000000004",
+      "product_name": "Pasteurized milk and packaged dairy products",
+      "quantity": "3000.00000000",
+      "unit": "tonne",
+      "description": "Synthetic annual production quantity"
+    }
+  ]
+}

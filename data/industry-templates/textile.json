@@ -1,0 +1,152 @@
+{
+  "schema_version": "1.0.0",
+  "template_id": "industry-textile-v1",
+  "template_version": "1.0.0",
+  "industry_code": "textile",
+  "name": "Textile manufacturing",
+  "status": "DEMO_ACTIVE",
+  "description": "Editable starting template for spinning, weaving, knitting, wet processing and finishing facilities. It suggests POTENTIAL sources and never confirms them automatically.",
+  "candidate_default_status": "POTENTIAL",
+  "common_products": [
+    "yarn",
+    "woven fabric",
+    "knitted fabric",
+    "dyed fabric",
+    "printed fabric",
+    "finished garments"
+  ],
+  "processes": [
+    {
+      "process_id": "textile_fibre_receipt",
+      "name": "Fibre, yarn, fabric and chemical receipt",
+      "sequence": 10,
+      "optional": false,
+      "typical_equipment_types": ["forklift", "conveyor", "warehouse", "chemical_storage"],
+      "typical_input_types": ["natural_fibre", "synthetic_fibre", "yarn", "greige_fabric", "dye", "chemical", "packaging"],
+      "typical_output_types": ["damaged_material", "packaging_waste"],
+      "suggested_source_type_ids": ["purchased_materials", "upstream_transportation", "mobile_fuel_combustion"]
+    },
+    {
+      "process_id": "textile_spinning",
+      "name": "Opening, carding, drawing and spinning",
+      "sequence": 20,
+      "optional": true,
+      "typical_equipment_types": ["blow_room", "carding_machine", "draw_frame", "spinning_frame", "compressor"],
+      "typical_input_types": ["fibre", "purchased_electricity", "lubricant"],
+      "typical_output_types": ["yarn", "fibre_waste", "dust"],
+      "suggested_source_type_ids": ["purchased_grid_electricity", "purchased_materials", "waste_generated_in_operations"]
+    },
+    {
+      "process_id": "textile_weaving_knitting",
+      "name": "Weaving or knitting",
+      "sequence": 30,
+      "optional": true,
+      "typical_equipment_types": ["loom", "knitting_machine", "warping_machine", "sizing_machine", "compressor"],
+      "typical_input_types": ["yarn", "size_chemical", "purchased_electricity", "steam"],
+      "typical_output_types": ["greige_fabric", "yarn_waste", "wastewater"],
+      "suggested_source_type_ids": ["purchased_grid_electricity", "purchased_heat_steam_cooling", "purchased_materials", "waste_generated_in_operations"]
+    },
+    {
+      "process_id": "textile_pretreatment",
+      "name": "Desizing, scouring, bleaching and washing",
+      "sequence": 40,
+      "optional": true,
+      "typical_equipment_types": ["washing_range", "bleaching_machine", "kier", "jet_machine", "pump"],
+      "typical_input_types": ["water", "steam", "caustic", "bleaching_agent", "surfactant", "purchased_electricity"],
+      "typical_output_types": ["wastewater", "chemical_container_waste", "treated_fabric"],
+      "suggested_source_type_ids": ["stationary_fuel_combustion", "purchased_grid_electricity", "purchased_heat_steam_cooling", "purchased_materials", "onsite_wastewater_treatment", "offsite_wastewater_treatment"]
+    },
+    {
+      "process_id": "textile_dyeing_printing",
+      "name": "Dyeing or printing",
+      "sequence": 50,
+      "optional": true,
+      "typical_equipment_types": ["dyeing_machine", "printing_machine", "steamer", "washing_range", "chemical_dosing_system"],
+      "typical_input_types": ["dye", "pigment", "binder", "salt", "chemical", "water", "steam", "purchased_electricity"],
+      "typical_output_types": ["dyed_or_printed_fabric", "wastewater", "chemical_container_waste", "sludge"],
+      "suggested_source_type_ids": ["purchased_grid_electricity", "purchased_heat_steam_cooling", "purchased_materials", "industrial_process_emissions", "onsite_wastewater_treatment", "offsite_wastewater_treatment", "waste_generated_in_operations"]
+    },
+    {
+      "process_id": "textile_drying_finishing",
+      "name": "Drying, stentering, curing and finishing",
+      "sequence": 60,
+      "optional": true,
+      "typical_equipment_types": ["stenter", "dryer", "curing_oven", "calendar", "coating_machine"],
+      "typical_input_types": ["natural_gas", "lpg", "diesel", "steam", "purchased_electricity", "finishing_chemical"],
+      "typical_output_types": ["finished_fabric", "combustion_exhaust", "air_release", "fabric_waste"],
+      "suggested_source_type_ids": ["stationary_fuel_combustion", "purchased_grid_electricity", "purchased_heat_steam_cooling", "industrial_process_emissions", "purchased_materials"]
+    },
+    {
+      "process_id": "textile_utilities",
+      "name": "Boiler house, thermic fluid, compressed air and backup power",
+      "sequence": 70,
+      "optional": false,
+      "typical_equipment_types": ["boiler", "thermic_fluid_heater", "diesel_generator", "compressor", "chiller"],
+      "typical_input_types": ["coal", "biomass", "natural_gas", "lpg", "diesel", "purchased_electricity", "refrigerant"],
+      "typical_output_types": ["combustion_exhaust", "ash", "waste_oil", "refrigerant_release"],
+      "suggested_source_type_ids": ["stationary_fuel_combustion", "purchased_grid_electricity", "refrigerant_fugitive_emissions", "waste_generated_in_operations"]
+    },
+    {
+      "process_id": "textile_effluent_treatment",
+      "name": "Effluent treatment and sludge handling",
+      "sequence": 80,
+      "optional": true,
+      "typical_equipment_types": ["effluent_treatment_plant", "aeration_tank", "anaerobic_reactor", "reverse_osmosis_system", "sludge_dewatering_unit"],
+      "typical_input_types": ["wastewater", "purchased_electricity", "treatment_chemical"],
+      "typical_output_types": ["treated_effluent", "sludge", "reject_stream", "methane_release"],
+      "suggested_source_type_ids": ["onsite_wastewater_treatment", "offsite_wastewater_treatment", "waste_generated_in_operations", "purchased_grid_electricity"]
+    },
+    {
+      "process_id": "textile_packaging_dispatch",
+      "name": "Inspection, packaging and dispatch",
+      "sequence": 90,
+      "optional": false,
+      "typical_equipment_types": ["inspection_machine", "baling_press", "packaging_machine", "forklift", "company_vehicle", "third_party_vehicle"],
+      "typical_input_types": ["plastic_packaging", "cardboard_packaging", "purchased_electricity", "vehicle_fuel"],
+      "typical_output_types": ["packaged_product", "fabric_waste", "packaging_waste"],
+      "suggested_source_type_ids": ["purchased_materials", "purchased_grid_electricity", "mobile_fuel_combustion", "downstream_transportation", "waste_generated_in_operations"]
+    }
+  ],
+  "verification_questions": [
+    {
+      "question_id": "TEXTILE-Q-001",
+      "prompt": "Which processes are performed onsite: spinning, weaving, knitting, wet processing, printing, drying, finishing or garment making?",
+      "required_for_source_type_ids": ["outsourced_manufacturing"]
+    },
+    {
+      "question_id": "TEXTILE-Q-002",
+      "prompt": "Which fuels are used in boilers, thermic-fluid heaters, stenters, dryers, ovens and generators?",
+      "required_for_source_type_ids": ["stationary_fuel_combustion"]
+    },
+    {
+      "question_id": "TEXTILE-Q-003",
+      "prompt": "Is steam or heat generated onsite or purchased from another facility?",
+      "required_for_source_type_ids": ["stationary_fuel_combustion", "purchased_heat_steam_cooling"]
+    },
+    {
+      "question_id": "TEXTILE-Q-004",
+      "prompt": "Which fibres, yarns, fabrics, dyes and chemicals are purchased, and what quantities are available?",
+      "required_for_source_type_ids": ["purchased_materials"]
+    },
+    {
+      "question_id": "TEXTILE-Q-005",
+      "prompt": "Can any dyeing, printing, curing, coating or treatment process directly release a greenhouse gas apart from combustion?",
+      "required_for_source_type_ids": ["industrial_process_emissions"]
+    },
+    {
+      "question_id": "TEXTILE-Q-006",
+      "prompt": "Which chillers or air-conditioning systems contain refrigerants, and were any refrigerants added or removed?",
+      "required_for_source_type_ids": ["refrigerant_fugitive_emissions"]
+    },
+    {
+      "question_id": "TEXTILE-Q-007",
+      "prompt": "How much wastewater is generated, how is it treated, and what happens to sludge and reject streams?",
+      "required_for_source_type_ids": ["onsite_wastewater_treatment", "offsite_wastewater_treatment", "waste_generated_in_operations"]
+    },
+    {
+      "question_id": "TEXTILE-Q-008",
+      "prompt": "Which inbound and outbound transport activities use company-controlled vehicles and which use third-party carriers?",
+      "required_for_source_type_ids": ["mobile_fuel_combustion", "upstream_transportation", "downstream_transportation"]
+    }
+  ]
+}

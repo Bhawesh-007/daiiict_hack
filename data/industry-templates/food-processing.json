@@ -1,0 +1,152 @@
+{
+  "schema_version": "1.0.0",
+  "template_id": "industry-food-processing-v1",
+  "template_version": "1.0.0",
+  "industry_code": "food_processing",
+  "name": "Food processing",
+  "status": "DEMO_ACTIVE",
+  "description": "Editable starting template for food and beverage manufacturing, including dairy and cold-chain operations. It suggests POTENTIAL sources and never confirms them automatically.",
+  "candidate_default_status": "POTENTIAL",
+  "common_products": [
+    "dairy products",
+    "packaged foods",
+    "beverages",
+    "processed fruit and vegetables",
+    "bakery products",
+    "frozen foods"
+  ],
+  "processes": [
+    {
+      "process_id": "food_raw_material_receipt",
+      "name": "Raw material receipt and unloading",
+      "sequence": 10,
+      "optional": false,
+      "typical_equipment_types": ["milk_unloading_pump", "forklift", "conveyor", "weighing_system"],
+      "typical_input_types": ["raw_food_material", "purchased_electricity", "vehicle_fuel"],
+      "typical_output_types": ["damaged_material", "packaging_waste"],
+      "suggested_source_type_ids": ["purchased_materials", "upstream_transportation", "mobile_fuel_combustion"]
+    },
+    {
+      "process_id": "food_chilling_and_storage",
+      "name": "Raw material chilling and cold storage",
+      "sequence": 20,
+      "optional": true,
+      "typical_equipment_types": ["chilling_unit", "cold_room", "refrigeration_system", "pump"],
+      "typical_input_types": ["purchased_electricity", "refrigerant", "water"],
+      "typical_output_types": ["refrigerant_release", "wastewater"],
+      "suggested_source_type_ids": ["purchased_grid_electricity", "refrigerant_fugitive_emissions"]
+    },
+    {
+      "process_id": "food_preparation",
+      "name": "Preparation, mixing and quality testing",
+      "sequence": 30,
+      "optional": false,
+      "typical_equipment_types": ["mixer", "grinder", "separator", "pump", "laboratory_equipment"],
+      "typical_input_types": ["raw_food_material", "ingredient", "purchased_electricity", "water"],
+      "typical_output_types": ["prepared_material", "organic_residue", "wastewater"],
+      "suggested_source_type_ids": ["purchased_grid_electricity", "purchased_materials", "waste_generated_in_operations"]
+    },
+    {
+      "process_id": "food_thermal_processing",
+      "name": "Heating, cooking, pasteurization or frying",
+      "sequence": 40,
+      "optional": true,
+      "typical_equipment_types": ["boiler", "steam_generator", "oven", "fryer", "dryer", "pasteurizer"],
+      "typical_input_types": ["diesel", "lpg", "natural_gas", "biomass", "purchased_electricity", "raw_food_material"],
+      "typical_output_types": ["processed_food", "combustion_exhaust", "organic_residue"],
+      "suggested_source_type_ids": ["stationary_fuel_combustion", "purchased_grid_electricity", "industrial_process_emissions"]
+    },
+    {
+      "process_id": "food_filling_and_packaging",
+      "name": "Filling, sealing and packaging",
+      "sequence": 50,
+      "optional": false,
+      "typical_equipment_types": ["filling_machine", "sealing_machine", "labeling_machine", "packaging_machine"],
+      "typical_input_types": ["plastic_packaging", "cardboard_packaging", "glass_packaging", "metal_packaging", "purchased_electricity"],
+      "typical_output_types": ["packaged_product", "plastic_waste", "cardboard_waste", "rejected_product"],
+      "suggested_source_type_ids": ["purchased_grid_electricity", "purchased_materials", "waste_generated_in_operations"]
+    },
+    {
+      "process_id": "food_cleaning_in_place",
+      "name": "Cleaning in place and sanitation",
+      "sequence": 60,
+      "optional": true,
+      "typical_equipment_types": ["cip_system", "hot_water_system", "pump", "chemical_dosing_system"],
+      "typical_input_types": ["purchased_electricity", "heat", "water", "cleaning_chemical", "sanitizer"],
+      "typical_output_types": ["wastewater", "chemical_container_waste"],
+      "suggested_source_type_ids": ["purchased_grid_electricity", "purchased_materials", "onsite_wastewater_treatment", "offsite_wastewater_treatment"]
+    },
+    {
+      "process_id": "food_utilities",
+      "name": "Utilities and backup power",
+      "sequence": 70,
+      "optional": true,
+      "typical_equipment_types": ["diesel_generator", "compressor", "water_treatment_system", "transformer"],
+      "typical_input_types": ["diesel", "purchased_electricity", "water", "treatment_chemical"],
+      "typical_output_types": ["combustion_exhaust", "waste_oil", "sludge"],
+      "suggested_source_type_ids": ["stationary_fuel_combustion", "purchased_grid_electricity", "waste_generated_in_operations"]
+    },
+    {
+      "process_id": "food_wastewater_treatment",
+      "name": "Wastewater collection and treatment",
+      "sequence": 80,
+      "optional": true,
+      "typical_equipment_types": ["effluent_treatment_plant", "aeration_tank", "anaerobic_digester", "sludge_dewatering_unit"],
+      "typical_input_types": ["wastewater", "purchased_electricity", "treatment_chemical"],
+      "typical_output_types": ["treated_effluent", "sludge", "biogas", "methane_release"],
+      "suggested_source_type_ids": ["onsite_wastewater_treatment", "offsite_wastewater_treatment", "waste_generated_in_operations"]
+    },
+    {
+      "process_id": "food_finished_goods_and_dispatch",
+      "name": "Finished-goods storage and dispatch",
+      "sequence": 90,
+      "optional": false,
+      "typical_equipment_types": ["cold_room", "warehouse", "electric_forklift", "company_vehicle", "third_party_vehicle"],
+      "typical_input_types": ["purchased_electricity", "refrigerant", "diesel"],
+      "typical_output_types": ["dispatched_product", "refrigerant_release"],
+      "suggested_source_type_ids": ["purchased_grid_electricity", "refrigerant_fugitive_emissions", "mobile_fuel_combustion", "downstream_transportation"]
+    }
+  ],
+  "verification_questions": [
+    {
+      "question_id": "FOOD-Q-001",
+      "prompt": "Which boilers, ovens, fryers, dryers or generators burn fuel, and what fuel does each use?",
+      "required_for_source_type_ids": ["stationary_fuel_combustion"]
+    },
+    {
+      "question_id": "FOOD-Q-002",
+      "prompt": "What refrigerant is used in each chilling, cold-room and air-conditioning system, and was any refrigerant added or removed during the reporting period?",
+      "required_for_source_type_ids": ["refrigerant_fugitive_emissions"]
+    },
+    {
+      "question_id": "FOOD-Q-003",
+      "prompt": "Are fermentation, biological treatment or other direct greenhouse-gas-producing processes present?",
+      "required_for_source_type_ids": ["industrial_process_emissions", "onsite_wastewater_treatment"]
+    },
+    {
+      "question_id": "FOOD-Q-004",
+      "prompt": "What quantities and material types of plastic, cardboard, glass and metal packaging are purchased?",
+      "required_for_source_type_ids": ["purchased_materials"]
+    },
+    {
+      "question_id": "FOOD-Q-005",
+      "prompt": "What quantities of organic residue and packaging waste are generated, and what final treatment route is verified for each?",
+      "required_for_source_type_ids": ["waste_generated_in_operations"]
+    },
+    {
+      "question_id": "FOOD-Q-006",
+      "prompt": "Is wastewater treated onsite, offsite or both, and is the treatment aerobic, anaerobic or another method?",
+      "required_for_source_type_ids": ["onsite_wastewater_treatment", "offsite_wastewater_treatment"]
+    },
+    {
+      "question_id": "FOOD-Q-007",
+      "prompt": "Which inbound and outbound trips use company-controlled vehicles and which use third-party carriers?",
+      "required_for_source_type_ids": ["mobile_fuel_combustion", "upstream_transportation", "downstream_transportation"]
+    },
+    {
+      "question_id": "FOOD-Q-008",
+      "prompt": "Are farming, ingredient production, packaging manufacture, cold storage or food processing steps outsourced?",
+      "required_for_source_type_ids": ["outsourced_manufacturing", "purchased_materials"]
+    }
+  ]
+}

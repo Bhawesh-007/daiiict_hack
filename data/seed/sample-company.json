@@ -1,0 +1,12 @@
+{
+  "seed_version": "1.0.0",
+  "company": {
+    "id": "10000000-0000-4000-8000-000000000001",
+    "name": "Sunrise Foods and Cold Chain Pvt. Ltd.",
+    "msme_category": "MEDIUM",
+    "registration_number": "REG-2025-SFCC-001",
+    "contact_email": "info@sunrisefoods.demo",
+    "contact_phone": "+91-79-5550199",
+    "address": "Ahmedabad, Gujarat, India"
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_id": "ghg-scopes-demo",
+  "version": "2026.1-demo",
+  "status": "DEMO",
+  "description": "Prototype scope labels and boundary rules. These labels support source classification but do not constitute regulatory certification.",
+  "organizational_boundaries": [
+    {
+      "boundary_id": "OPERATIONAL_CONTROL",
+      "name": "Operational control",
+      "description": "Include operations where the company has authority to introduce and implement operating policies."
+    },
+    {
+      "boundary_id": "FINANCIAL_CONTROL",
+      "name": "Financial control",
+      "description": "Include operations where the company directs financial and operating policies with a view to gaining economic benefits."
+    },
+    {
+      "boundary_id": "EQUITY_SHARE",
+      "name": "Equity share",
+      "description": "Account for emissions according to the company's share of equity in an operation. Not implemented by the simple MVP calculation path."
+    }
+  ],
+  "scopes": [
+    {
+      "scope_id": "SCOPE_1",
+      "name": "Scope 1",
+      "description": "Direct greenhouse-gas emissions from sources owned or controlled by the reporting company.",
+      "included_families": [
+        "stationary_combustion",
+        "mobile_combustion",
+        "industrial_process",
+        "fugitive_emissions",
+        "wastewater"
+      ]
+    },
+    {
+      "scope_id": "SCOPE_2",
+      "name": "Scope 2",
+      "description": "Indirect emissions from purchased electricity, steam, heat or cooling consumed by the reporting company.",
+      "supported_methods": ["LOCATION_BASED"],
+      "future_methods": ["MARKET_BASED"]
+    },
+    {
+      "scope_id": "SCOPE_3",
+      "name": "Scope 3",
+      "description": "Other indirect value-chain emissions. The prototype includes selected categories only and must label the inventory as partial."
+    }
+  ],
+  "selected_scope_3_categories": [
+    {
+      "scope_id": "SCOPE_3_CATEGORY_1",
+      "category_number": 1,
+      "name": "Purchased goods and services",
+      "prototype_status": "SELECTED"
+    },
+    {
+      "scope_id": "SCOPE_3_CATEGORY_3",
+      "category_number": 3,
+      "name": "Fuel- and energy-related activities not included in Scope 1 or Scope 2",
+      "prototype_status": "OPTIONAL"
+    },
+    {
+      "scope_id": "SCOPE_3_CATEGORY_4",
+      "category_number": 4,
+      "name": "Upstream transportation and distribution",
+      "prototype_status": "SELECTED"
+    },
+    {
+      "scope_id": "SCOPE_3_CATEGORY_5",
+      "category_number": 5,
+      "name": "Waste generated in operations",
+      "prototype_status": "SELECTED"
+    },
+    {
+      "scope_id": "SCOPE_3_CATEGORY_9",
+      "category_number": 9,
+      "name": "Downstream transportation and distribution",
+      "prototype_status": "SELECTED"
+    }
+  ],
+  "classification_rules": [
+    {
+      "rule_id": "SCOPE-CLASS-001",
+      "description": "Owned or operationally controlled stationary and mobile combustion is Scope 1.",
+      "required_facts": ["ownership_or_control"]
+    },
+    {
+      "rule_id": "SCOPE-CLASS-002",
+      "description": "Purchased electricity, heat, steam and cooling consumed by the facility is Scope 2.",
+      "required_facts": ["energy_service_type", "purchased_or_generated"]
+    },
+    {
+      "rule_id": "SCOPE-CLASS-003",
+      "description": "Third-party activity outside organizational control is retained as a value-chain candidate and mapped to an included Scope 3 category only after review.",
+      "required_facts": ["ownership_or_control", "value_chain_position"]
+    }
+  ],
+  "inventory_labels": [
+    "SCOPE_1_AND_2_ONLY",
+    "PARTIAL_SCOPE_3",
+    "COMPLETE_FOR_SELECTED_BOUNDARY"
+  ]
+}

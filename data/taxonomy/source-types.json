@@ -1,0 +1,250 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_id": "emission-source-types",
+  "version": "2026.1-demo",
+  "status": "DEMO",
+  "last_reviewed": "2026-09-12",
+  "description": "Canonical emission-source families and source types used by Layer 1. A template or rule may only create a POTENTIAL candidate; user review is required before confirmation.",
+  "scope_note": "Every default scope is provisional. Final scope depends on the reporting boundary, ownership or operational control, and the nature of the transaction.",
+  "calculation_note": "Industry type and identification confidence are never emission multipliers. Quantification requires confirmed activity data and a compatible, versioned emission factor.",
+  "candidate_statuses": [
+    "POTENTIAL",
+    "MISSING_INFORMATION",
+    "CONFIRMED",
+    "NOT_APPLICABLE",
+    "OUTSOURCED"
+  ],
+  "source_families": [
+    {
+      "family_id": "stationary_combustion",
+      "name": "Stationary combustion",
+      "description": "Fuel burned in fixed equipment such as boilers, furnaces, ovens, dryers, heaters and generators."
+    },
+    {
+      "family_id": "mobile_combustion",
+      "name": "Mobile combustion",
+      "description": "Fuel burned in company-controlled vehicles and mobile equipment."
+    },
+    {
+      "family_id": "purchased_energy",
+      "name": "Purchased energy",
+      "description": "Electricity, heat, steam or cooling purchased for facility operations."
+    },
+    {
+      "family_id": "industrial_process",
+      "name": "Industrial process emissions",
+      "description": "Greenhouse gases released directly by physical, chemical or biological processing rather than fuel combustion."
+    },
+    {
+      "family_id": "fugitive_emissions",
+      "name": "Fugitive emissions",
+      "description": "Intentional or unintended equipment-related releases such as refrigerant leakage."
+    },
+    {
+      "family_id": "purchased_goods_services",
+      "name": "Purchased goods and services",
+      "description": "Upstream emissions associated with purchased raw materials, packaging, chemicals and services."
+    },
+    {
+      "family_id": "transportation_distribution",
+      "name": "Transportation and distribution",
+      "description": "Company-controlled or third-party movement of materials, products and waste."
+    },
+    {
+      "family_id": "waste",
+      "name": "Waste generated in operations",
+      "description": "Treatment and disposal of operational solid and liquid waste."
+    },
+    {
+      "family_id": "wastewater",
+      "name": "Wastewater generation and treatment",
+      "description": "Direct or value-chain emissions from wastewater collection and treatment."
+    },
+    {
+      "family_id": "outsourced_operations",
+      "name": "Outsourced operations",
+      "description": "Manufacturing or operational activity performed by a third party outside direct organizational control."
+    }
+  ],
+  "source_types": [
+    {
+      "source_type_id": "stationary_fuel_combustion",
+      "name": "Stationary fuel combustion",
+      "family_id": "stationary_combustion",
+      "default_scope": "SCOPE_1",
+      "scope_rule": "Scope 1 when the combustion equipment is owned or operationally controlled by the reporting company.",
+      "supported_activity_types": ["fuel_mass", "fuel_volume", "fuel_energy"],
+      "minimum_data": ["equipment_type", "fuel_type", "activity_quantity", "activity_unit", "reporting_period"],
+      "typical_evidence": ["fuel invoice", "fuel log", "equipment log", "meter record"],
+      "aliases": ["boiler fuel", "furnace fuel", "generator fuel", "DG set", "diesel boiler", "coal boiler", "LPG oven", "gas furnace"]
+    },
+    {
+      "source_type_id": "mobile_fuel_combustion",
+      "name": "Mobile fuel combustion",
+      "family_id": "mobile_combustion",
+      "default_scope": "SCOPE_1",
+      "scope_rule": "Scope 1 for vehicles or mobile equipment under operational control; otherwise classify the transport service in the applicable Scope 3 category.",
+      "supported_activity_types": ["fuel_mass", "fuel_volume", "distance"],
+      "minimum_data": ["vehicle_type", "fuel_type", "ownership_or_control", "activity_quantity", "activity_unit", "reporting_period"],
+      "typical_evidence": ["fuel card statement", "fuel invoice", "odometer log", "vehicle register"],
+      "aliases": ["company vehicle", "delivery van", "truck", "forklift", "mobile equipment"]
+    },
+    {
+      "source_type_id": "purchased_grid_electricity",
+      "name": "Purchased grid electricity",
+      "family_id": "purchased_energy",
+      "default_scope": "SCOPE_2",
+      "scope_rule": "Scope 2 for electricity purchased and consumed by the reporting facility.",
+      "supported_activity_types": ["electricity"],
+      "minimum_data": ["activity_quantity", "activity_unit", "facility_location", "reporting_period"],
+      "typical_evidence": ["electricity bill", "meter reading", "utility statement"],
+      "aliases": ["electricity", "grid power", "power bill", "utility electricity", "purchased electricity"]
+    },
+    {
+      "source_type_id": "purchased_heat_steam_cooling",
+      "name": "Purchased heat, steam or cooling",
+      "family_id": "purchased_energy",
+      "default_scope": "SCOPE_2",
+      "scope_rule": "Scope 2 when heat, steam or cooling is purchased from an external supplier and consumed by the facility.",
+      "supported_activity_types": ["energy", "supplier_service"],
+      "minimum_data": ["energy_service_type", "activity_quantity", "activity_unit", "supplier", "reporting_period"],
+      "typical_evidence": ["supplier invoice", "heat or steam meter", "supply contract"],
+      "aliases": ["purchased steam", "district heat", "purchased heat", "district cooling", "purchased cooling"]
+    },
+    {
+      "source_type_id": "industrial_process_emissions",
+      "name": "Industrial process emissions",
+      "family_id": "industrial_process",
+      "default_scope": "SCOPE_1",
+      "scope_rule": "Scope 1 when greenhouse gases are released by a process operated or controlled by the reporting company.",
+      "supported_activity_types": ["material_mass", "production_mass", "process_specific", "direct_emissions_measurement"],
+      "minimum_data": ["process_type", "emission_mechanism", "activity_quantity", "activity_unit", "reporting_period"],
+      "typical_evidence": ["production log", "material balance", "laboratory record", "process specification"],
+      "aliases": ["process reaction", "calcination", "fermentation emission", "chemical process emission"]
+    },
+    {
+      "source_type_id": "refrigerant_fugitive_emissions",
+      "name": "Refrigerant leakage and release",
+      "family_id": "fugitive_emissions",
+      "default_scope": "SCOPE_1",
+      "scope_rule": "Scope 1 for releases from refrigeration or air-conditioning equipment under operational control.",
+      "supported_activity_types": ["refrigerant_mass", "refrigerant_mass_balance"],
+      "minimum_data": ["refrigerant_type", "calculation_method", "activity_quantity", "activity_unit", "reporting_period"],
+      "typical_evidence": ["service record", "refrigerant purchase record", "equipment charge log", "maintenance report"],
+      "aliases": ["refrigerant", "cooling gas", "AC gas", "chiller gas", "refrigerant refill", "refrigerant top-up"]
+    },
+    {
+      "source_type_id": "other_fugitive_emissions",
+      "name": "Other fugitive greenhouse-gas releases",
+      "family_id": "fugitive_emissions",
+      "default_scope": "SCOPE_1",
+      "scope_rule": "Scope depends on the gas, equipment and operational control.",
+      "supported_activity_types": ["gas_mass", "process_specific"],
+      "minimum_data": ["gas_type", "release_mechanism", "activity_quantity", "activity_unit", "reporting_period"],
+      "typical_evidence": ["inventory reconciliation", "maintenance report", "incident record"],
+      "aliases": ["industrial gas leak", "fire suppressant release", "methane leak", "process gas release"]
+    },
+    {
+      "source_type_id": "purchased_materials",
+      "name": "Purchased raw materials, packaging and chemicals",
+      "family_id": "purchased_goods_services",
+      "default_scope": "SCOPE_3_CATEGORY_1",
+      "scope_rule": "Selected Scope 3 Category 1 when cradle-to-gate emissions of purchased goods or services are included.",
+      "supported_activity_types": ["material_mass", "supplier_specific"],
+      "minimum_data": ["material_type", "activity_quantity", "activity_unit", "reporting_period"],
+      "typical_evidence": ["purchase invoice", "goods receipt", "supplier declaration", "bill of materials"],
+      "aliases": ["raw material", "ingredient", "packaging", "plastic", "cardboard", "chemical", "dye"]
+    },
+    {
+      "source_type_id": "fuel_energy_related_activities",
+      "name": "Fuel- and energy-related activities not included in Scope 1 or 2",
+      "family_id": "purchased_goods_services",
+      "default_scope": "SCOPE_3_CATEGORY_3",
+      "scope_rule": "Selected Scope 3 Category 3 for upstream fuel and energy emissions that are not already counted in Scope 1 or Scope 2.",
+      "supported_activity_types": ["fuel_mass", "fuel_volume", "electricity", "energy"],
+      "minimum_data": ["energy_or_fuel_type", "activity_quantity", "activity_unit", "reporting_period"],
+      "typical_evidence": ["fuel invoice", "electricity bill", "supplier factor"],
+      "aliases": ["well-to-tank", "WTT", "upstream fuel", "transmission and distribution losses"]
+    },
+    {
+      "source_type_id": "upstream_transportation",
+      "name": "Upstream transportation and distribution",
+      "family_id": "transportation_distribution",
+      "default_scope": "SCOPE_3_CATEGORY_4",
+      "scope_rule": "Selected Scope 3 Category 4 for third-party transportation and distribution of purchased goods when not owned or controlled by the reporting company.",
+      "supported_activity_types": ["transport_work", "distance", "fuel_volume"],
+      "minimum_data": ["transport_mode", "ownership_or_control", "activity_quantity", "activity_unit", "reporting_period"],
+      "typical_evidence": ["freight invoice", "shipment record", "route record", "carrier statement"],
+      "aliases": ["inbound freight", "supplier transport", "third-party inbound logistics", "raw material transport"]
+    },
+    {
+      "source_type_id": "downstream_transportation",
+      "name": "Downstream transportation and distribution",
+      "family_id": "transportation_distribution",
+      "default_scope": "SCOPE_3_CATEGORY_9",
+      "scope_rule": "Selected Scope 3 Category 9 for qualifying third-party transportation of sold products; review Category 4 treatment when the reporting company purchases the transport service.",
+      "supported_activity_types": ["transport_work", "distance", "fuel_volume"],
+      "minimum_data": ["transport_mode", "ownership_or_control", "activity_quantity", "activity_unit", "reporting_period"],
+      "typical_evidence": ["freight invoice", "shipment record", "route record", "carrier statement"],
+      "aliases": ["outbound freight", "customer delivery", "third-party distribution", "finished goods transport"]
+    },
+    {
+      "source_type_id": "waste_generated_in_operations",
+      "name": "Waste generated in operations",
+      "family_id": "waste",
+      "default_scope": "SCOPE_3_CATEGORY_5",
+      "scope_rule": "Selected Scope 3 Category 5 when waste is treated by a third party; controlled onsite treatment may create Scope 1 emissions.",
+      "supported_activity_types": ["waste_mass"],
+      "minimum_data": ["waste_type", "treatment_route", "activity_quantity", "activity_unit", "reporting_period"],
+      "typical_evidence": ["waste manifest", "weighbridge record", "contractor receipt", "treatment certificate"],
+      "aliases": ["landfill waste", "incinerated waste", "recycled waste", "organic waste", "sludge", "waste contractor"]
+    },
+    {
+      "source_type_id": "onsite_wastewater_treatment",
+      "name": "Onsite wastewater treatment",
+      "family_id": "wastewater",
+      "default_scope": "SCOPE_1",
+      "scope_rule": "Scope 1 when methane or nitrous oxide is emitted by wastewater treatment under operational control.",
+      "supported_activity_types": ["wastewater_volume", "wastewater_process_specific"],
+      "minimum_data": ["treatment_method", "wastewater_volume", "volume_unit", "reporting_period"],
+      "typical_evidence": ["treatment plant log", "flow meter", "COD or BOD test", "sludge record"],
+      "aliases": ["onsite ETP", "effluent treatment plant", "STP", "onsite wastewater treatment"]
+    },
+    {
+      "source_type_id": "offsite_wastewater_treatment",
+      "name": "Offsite wastewater treatment",
+      "family_id": "wastewater",
+      "default_scope": "SCOPE_3_CATEGORY_5",
+      "scope_rule": "Selected Scope 3 Category 5 when wastewater generated by operations is treated by a third party.",
+      "supported_activity_types": ["wastewater_volume", "wastewater_process_specific"],
+      "minimum_data": ["treatment_method", "wastewater_volume", "volume_unit", "reporting_period"],
+      "typical_evidence": ["utility bill", "contractor statement", "discharge record", "laboratory report"],
+      "aliases": ["municipal wastewater", "external ETP", "CETP", "sewer discharge"]
+    },
+    {
+      "source_type_id": "outsourced_manufacturing",
+      "name": "Outsourced manufacturing or processing",
+      "family_id": "outsourced_operations",
+      "default_scope": "SCOPE_3_CATEGORY_1",
+      "scope_rule": "Selected Scope 3 Category 1 when a supplier performs manufacturing or processing purchased by the reporting company; review classification for the applicable value-chain relationship.",
+      "supported_activity_types": ["supplier_specific", "production_mass"],
+      "minimum_data": ["outsourced_process", "supplier", "activity_quantity", "activity_unit", "reporting_period"],
+      "typical_evidence": ["supplier invoice", "tolling agreement", "supplier emissions statement", "production receipt"],
+      "aliases": ["job work", "contract manufacturing", "outsourced processing", "third-party production"]
+    }
+  ],
+  "references": [
+    {
+      "title": "GHG Protocol Corporate Standard",
+      "url": "https://ghgprotocol.org/corporate-standard"
+    },
+    {
+      "title": "GHG Protocol Scope 2 Guidance",
+      "url": "https://ghgprotocol.org/scope-2-guidance"
+    },
+    {
+      "title": "GHG Protocol Calculation Tools and Guidance",
+      "url": "https://ghgprotocol.org/calculation-tools-and-guidance"
+    }
+  ]
+}

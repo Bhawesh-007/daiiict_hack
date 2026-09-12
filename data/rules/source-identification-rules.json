@@ -1,0 +1,313 @@
+{
+  "schema_version": "1.0.0",
+  "ruleset_id": "source-identification-rules",
+  "ruleset_version": "1.0.0",
+  "status": "DEMO_ACTIVE",
+  "description": "Deterministic rules evaluated against normalized facility facts. Rules create explained POTENTIAL candidates only; they never confirm a source or calculate emissions.",
+  "evaluation_contract": {
+    "default_candidate_status": "POTENTIAL",
+    "missing_field_result": "NO_MATCH",
+    "condition_scope": "All conditions in one rule apply to the same normalized fact record.",
+    "supported_operators": ["EQUALS", "IN", "PRESENT", "TRUE", "CONTAINS_ANY"],
+    "deduplication_key_fields": ["source_type_id", "process_id", "equipment_id", "value_chain_position"],
+    "merge_behavior": "Merge candidate origins and reasons without discarding any triggering rule ID."
+  },
+  "rules": [
+    {
+      "rule_id": "SRC-RULE-001",
+      "version": "1.0.0",
+      "active": true,
+      "priority": 100,
+      "fact_type": "energy_input",
+      "match": "ALL",
+      "conditions": [
+        {"field": "energy_type", "operator": "EQUALS", "value": "purchased_grid_electricity"},
+        {"field": "consumed_by_facility", "operator": "TRUE"}
+      ],
+      "suggestion": {
+        "source_type_id": "purchased_grid_electricity",
+        "provisional_scope": "SCOPE_2",
+        "reason": "Purchased grid electricity is reported as consumed by the facility."
+      },
+      "follow_up_questions": [
+        "Are complete electricity bills or meter records available for the reporting period?",
+        "Is any onsite generation, exported electricity or purchased renewable electricity recorded separately?"
+      ]
+    },
+    {
+      "rule_id": "SRC-RULE-002",
+      "version": "1.0.0",
+      "active": true,
+      "priority": 100,
+      "fact_type": "energy_input",
+      "match": "ALL",
+      "conditions": [
+        {"field": "energy_type", "operator": "IN", "value": ["purchased_heat", "purchased_steam", "purchased_cooling"]},
+        {"field": "consumed_by_facility", "operator": "TRUE"}
+      ],
+      "suggestion": {
+        "source_type_id": "purchased_heat_steam_cooling",
+        "provisional_scope": "SCOPE_2",
+        "reason": "Purchased {{energy_type}} is reported as consumed by the facility."
+      },
+      "follow_up_questions": [
+        "Who supplies the energy service and in what unit is it billed?",
+        "Does the supplier provide a reviewed emission factor and boundary description?"
+      ]
+    },
+    {
+      "rule_id": "SRC-RULE-003",
+      "version": "1.0.0",
+      "active": true,
+      "priority": 100,
+      "fact_type": "equipment",
+      "match": "ALL",
+      "conditions": [
+        {"field": "equipment_type", "operator": "IN", "value": ["boiler", "steam_generator", "furnace", "oven", "fryer", "dryer", "stenter", "thermic_fluid_heater", "kiln", "diesel_generator", "generator"]},
+        {"field": "fuel_type", "operator": "PRESENT"}
+      ],
+      "suggestion": {
+        "source_type_id": "stationary_fuel_combustion",
+        "provisional_scope": "REQUIRES_CONTROL_REVIEW",
+        "reason": "{{equipment_type}} is reported with {{fuel_type}} as a fuel input."
+      },
+      "follow_up_questions": [
+        "Is this equipment owned or operationally controlled by the company?",
+        "What quantity of {{fuel_type}} was consumed during the reporting period?",
+        "Are equipment-specific fuel records available?"
+      ]
+    },
+    {
+      "rule_id": "SRC-RULE-004",
+      "version": "1.0.0",
+      "active": true,
+      "priority": 95,
+      "fact_type": "vehicle",
+      "match": "ALL",
+      "conditions": [
+        {"field": "ownership_or_control", "operator": "IN", "value": ["owned", "operationally_controlled"]},
+        {"field": "fuel_type", "operator": "PRESENT"}
+      ],
+      "suggestion": {
+        "source_type_id": "mobile_fuel_combustion",
+        "provisional_scope": "SCOPE_1",
+        "reason": "A company-controlled {{vehicle_type}} using {{fuel_type}} is reported."
+      },
+      "follow_up_questions": [
+        "What fuel quantity or distance record is available for the reporting period?",
+        "Is the activity already included in another fuel record?"
+      ]
+    },
+    {
+      "rule_id": "SRC-RULE-005",
+      "version": "1.0.0",
+      "active": true,
+      "priority": 100,
+      "fact_type": "equipment",
+      "match": "ANY",
+      "conditions": [
+        {"field": "equipment_type", "operator": "IN", "value": ["refrigeration_system", "chilling_unit", "cold_room", "chiller", "air_conditioner", "heat_pump"]},
+        {"field": "contained_gases", "operator": "CONTAINS_ANY", "value": ["refrigerant", "hfc", "pfc"]}
+      ],
+      "suggestion": {
+        "source_type_id": "refrigerant_fugitive_emissions",
+        "provisional_scope": "REQUIRES_CONTROL_REVIEW",
+        "reason": "Refrigeration or cooling equipment is present, so refrigerant leakage must be reviewed."
+      },
+      "follow_up_questions": [
+        "What refrigerant type and charge does each system use?",
+        "Was refrigerant added, recovered, disposed of or transferred during the reporting period?",
+        "Are service and maintenance records available?"
+      ]
+    },
+    {
+      "rule_id": "SRC-RULE-006",
+      "version": "1.0.0",
+      "active": true,
+      "priority": 90,
+      "fact_type": "process",
+      "match": "ANY",
+      "conditions": [
+        {"field": "direct_ghg_release", "operator": "TRUE"},
+        {"field": "emission_mechanism", "operator": "IN", "value": ["chemical_reaction", "biological_reaction", "calcination", "fermentation", "carbonate_use", "process_venting"]}
+      ],
+      "suggestion": {
+        "source_type_id": "industrial_process_emissions",
+        "provisional_scope": "REQUIRES_CONTROL_REVIEW",
+        "reason": "The {{process_name}} process may directly release greenhouse gases apart from fuel combustion."
+      },
+      "follow_up_questions": [
+        "Which greenhouse gas is released and by what mechanism?",
+        "What process activity or material-balance data is available?"
+      ]
+    },
+    {
+      "rule_id": "SRC-RULE-007",
+      "version": "1.0.0",
+      "active": true,
+      "priority": 80,
+      "fact_type": "material_input",
+      "match": "ALL",
+      "conditions": [
+        {"field": "purchased", "operator": "TRUE"},
+        {"field": "material_type", "operator": "PRESENT"}
+      ],
+      "suggestion": {
+        "source_type_id": "purchased_materials",
+        "provisional_scope": "SCOPE_3_CATEGORY_1",
+        "reason": "{{material_type}} is reported as a purchased material, packaging item or chemical."
+      },
+      "follow_up_questions": [
+        "What quantity was purchased during the reporting period?",
+        "Is material specification, recycled content or supplier-specific emissions data available?"
+      ]
+    },
+    {
+      "rule_id": "SRC-RULE-008",
+      "version": "1.0.0",
+      "active": true,
+      "priority": 90,
+      "fact_type": "transport_activity",
+      "match": "ALL",
+      "conditions": [
+        {"field": "provider_control", "operator": "EQUALS", "value": "third_party"},
+        {"field": "value_chain_position", "operator": "EQUALS", "value": "upstream"}
+      ],
+      "suggestion": {
+        "source_type_id": "upstream_transportation",
+        "provisional_scope": "SCOPE_3_CATEGORY_4",
+        "reason": "A third party transports purchased goods or materials upstream of the facility."
+      },
+      "follow_up_questions": [
+        "Who arranges and pays for the transport service?",
+        "What mass, distance, route and transport-mode data is available?"
+      ]
+    },
+    {
+      "rule_id": "SRC-RULE-009",
+      "version": "1.0.0",
+      "active": true,
+      "priority": 90,
+      "fact_type": "transport_activity",
+      "match": "ALL",
+      "conditions": [
+        {"field": "provider_control", "operator": "EQUALS", "value": "third_party"},
+        {"field": "value_chain_position", "operator": "EQUALS", "value": "downstream"}
+      ],
+      "suggestion": {
+        "source_type_id": "downstream_transportation",
+        "provisional_scope": "REQUIRES_CATEGORY_REVIEW",
+        "reason": "A third party transports or distributes products downstream of the facility."
+      },
+      "follow_up_questions": [
+        "Who arranges and pays for the transport service?",
+        "What mass, distance, route and transport-mode data is available?"
+      ]
+    },
+    {
+      "rule_id": "SRC-RULE-010",
+      "version": "1.0.0",
+      "active": true,
+      "priority": 90,
+      "fact_type": "waste_stream",
+      "match": "ALL",
+      "conditions": [
+        {"field": "generated_by_facility", "operator": "TRUE"},
+        {"field": "treatment_location", "operator": "EQUALS", "value": "offsite"}
+      ],
+      "suggestion": {
+        "source_type_id": "waste_generated_in_operations",
+        "provisional_scope": "SCOPE_3_CATEGORY_5",
+        "reason": "{{waste_type}} generated by the facility is sent for external treatment."
+      },
+      "follow_up_questions": [
+        "What quantity was sent to each treatment route?",
+        "Is the final treatment route supported by contractor evidence?"
+      ]
+    },
+    {
+      "rule_id": "SRC-RULE-011",
+      "version": "1.0.0",
+      "active": true,
+      "priority": 95,
+      "fact_type": "wastewater_stream",
+      "match": "ALL",
+      "conditions": [
+        {"field": "generated_by_facility", "operator": "TRUE"},
+        {"field": "treatment_location", "operator": "EQUALS", "value": "onsite"}
+      ],
+      "suggestion": {
+        "source_type_id": "onsite_wastewater_treatment",
+        "provisional_scope": "REQUIRES_CONTROL_REVIEW",
+        "reason": "Wastewater generated by the facility is reported as treated onsite."
+      },
+      "follow_up_questions": [
+        "What treatment technology and wastewater volume apply?",
+        "Are COD, BOD, methane-recovery and sludge records available?"
+      ]
+    },
+    {
+      "rule_id": "SRC-RULE-012",
+      "version": "1.0.0",
+      "active": true,
+      "priority": 95,
+      "fact_type": "wastewater_stream",
+      "match": "ALL",
+      "conditions": [
+        {"field": "generated_by_facility", "operator": "TRUE"},
+        {"field": "treatment_location", "operator": "EQUALS", "value": "offsite"}
+      ],
+      "suggestion": {
+        "source_type_id": "offsite_wastewater_treatment",
+        "provisional_scope": "SCOPE_3_CATEGORY_5",
+        "reason": "Wastewater generated by the facility is reported as treated offsite."
+      },
+      "follow_up_questions": [
+        "What volume and treatment route apply?",
+        "Is the treatment destination supported by a utility or contractor record?"
+      ]
+    },
+    {
+      "rule_id": "SRC-RULE-013",
+      "version": "1.0.0",
+      "active": true,
+      "priority": 85,
+      "fact_type": "outsourced_activity",
+      "match": "ALL",
+      "conditions": [
+        {"field": "performed_by_third_party", "operator": "TRUE"},
+        {"field": "activity_type", "operator": "IN", "value": ["manufacturing", "processing", "packaging", "washing", "maintenance", "treatment"]}
+      ],
+      "suggestion": {
+        "source_type_id": "outsourced_manufacturing",
+        "provisional_scope": "REQUIRES_CATEGORY_REVIEW",
+        "reason": "{{activity_type}} is performed by a third party outside direct operational control."
+      },
+      "follow_up_questions": [
+        "Which supplier performs the activity and what quantity of output or service is purchased?",
+        "Is supplier-specific emissions information available?"
+      ]
+    },
+    {
+      "rule_id": "SRC-RULE-014",
+      "version": "1.0.0",
+      "active": true,
+      "priority": 80,
+      "fact_type": "equipment",
+      "match": "ALL",
+      "conditions": [
+        {"field": "contained_gases", "operator": "PRESENT"},
+        {"field": "release_possible", "operator": "TRUE"}
+      ],
+      "suggestion": {
+        "source_type_id": "other_fugitive_emissions",
+        "provisional_scope": "REQUIRES_CONTROL_REVIEW",
+        "reason": "Equipment contains a gas that may be released during use, maintenance or an incident."
+      },
+      "follow_up_questions": [
+        "Which gases are present and are they greenhouse gases?",
+        "What inventory, refill, transfer or incident records are available?"
+      ]
+    }
+  ]
+}

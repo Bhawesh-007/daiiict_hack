@@ -1,0 +1,539 @@
+EMISSIONLENS — SAMPLE FINAL EMISSIONS REPORT
+Identification + Activity Data + Calculation + Hotspot Ranking
+
+Report status: Synthetic demonstration report
+Assessment ID: ASM-2026-0001
+Calculation run: CALC-2026-0001
+Generated for: HackOut'26 prototype demonstration
+
+IMPORTANT DISCLAIMER
+----------------------------------------------------------------------
+This is a fictional example showing the expected system output. The company,
+activity data and most emission factors are synthetic. The results must not be
+used for regulatory reporting, assurance, investment decisions or carbon-credit
+claims. A production report must use reviewed activity data and authoritative,
+geography-, technology- and year-appropriate emission factors.
+
+This report ends at emissions identification, calculation and hotspot ranking.
+It does not contain circular-intervention recommendations.
+
+======================================================================
+1. COMPANY AND ASSESSMENT PROFILE
+======================================================================
+
+Company: Sunrise Foods and Cold Chain Pvt. Ltd.
+Company type: Micro, Small or Medium Enterprise (MSME)
+Industry: Food processing
+Sub-industry: Dairy and packaged food
+Products: Pasteurized milk, yogurt and flavoured dairy drinks
+Facility: Ahmedabad manufacturing facility, Gujarat, India
+Reporting period: April 2025 to March 2026
+Number of employees: 86
+Operating pattern: Two shifts per day, six days per week
+Production quantity: 3,000 tonnes of finished product during the period
+
+Organizational boundary used for this sample:
+- Include activities controlled at the Ahmedabad facility.
+- Include fuel used in company-owned delivery vehicles.
+- Include purchased grid electricity.
+- Include selected upstream materials, waste and transportation where data
+  was supplied.
+- Record unresolved and excluded sources separately.
+
+Inventory boundary:
+- Scope 1: Included where activity data is available.
+- Scope 2: Purchased grid electricity included.
+- Scope 3: Partial only; selected packaging, waste and transportation included.
+
+======================================================================
+2. SOURCE-IDENTIFICATION SUMMARY
+======================================================================
+
+Identification methods used:
+- Food-processing industry template
+- Facility process-flow mapping
+- Equipment and input/output mapping
+- Deterministic source rules
+- ML-assisted extraction and missing-source detection
+- Universal source-family checklist
+- Company confirmation and sample evidence
+
+Source status summary:
+- Quantified sources: 9
+- Identified but not quantified sources: 7
+- Not-applicable sources: 2
+- Identification completeness: Partial
+- Quantification completeness: Partial
+- Overall report confidence: Medium
+
+Why the inventory remains partial:
+- Raw-milk supplier emissions are not quantified.
+- Cleaning chemicals are not quantified.
+- Wastewater-treatment information is incomplete.
+- Supplier-side transport is incomplete.
+- Final waste-treatment routes are based on a demonstration assumption.
+- Scope 3 coverage is selective rather than complete.
+
+======================================================================
+3. CALCULATION METHODOLOGY
+======================================================================
+
+Line-item formula:
+
+  Emissions (kg CO2e)
+  = Activity quantity x Unit-conversion multiplier x Emission factor
+
+Contribution formula:
+
+  Source contribution (%)
+  = Source emissions / Partial inventory total x 100
+
+Intensity formula:
+
+  Emissions intensity
+  = Partial inventory total / Production quantity
+
+Calculation rules:
+- Intermediate results are not rounded.
+- Display values are rounded to two decimal places.
+- Every factor must match the activity-data unit.
+- Each line stores the factor source, version, boundary and confidence.
+- Missing activity data is not treated as zero.
+- The reported total covers quantified sources only.
+
+======================================================================
+4. EMISSION-FACTOR REGISTER USED IN THIS SAMPLE
+======================================================================
+
+EF-001 — Purchased Indian grid electricity
+Value used: 0.675 kg CO2e per kWh
+Use in this report: Purchased grid electricity
+Geography/year: India, FY 2025-26 demonstration value
+Factor status: Demonstration factor based on the current Indian grid-average
+  magnitude; production implementation must preserve the official gas/boundary
+  definition and confirm suitability for corporate Scope 2 reporting.
+Confidence: Medium
+
+EF-002 — Diesel direct combustion
+Value used: 2.68 kg CO2e per litre
+Use in this report: Boiler, generator and company delivery vans
+Factor status: Illustrative direct-combustion factor
+Production requirement: Replace with an approved factor matching fuel grade,
+  combustion category, geography, year and included gases.
+Confidence: Medium
+
+EF-003 — R-134a refrigerant release
+Value used: 1,430 kg CO2e per kg released
+Use in this report: Refrigerant added during servicing, treated as released under
+  the sample mass-balance assumption
+Factor status: Illustrative GWP value; production use must select the required
+  assessment report and reporting standard.
+Confidence: Medium
+
+EF-004 — Plastic packaging material
+Value used: 2.50 kg CO2e per kg material
+Use in this report: Mixed plastic containers, lids and seals
+Factor status: Synthetic blended cradle-to-gate demonstration factor
+Confidence: Low
+
+EF-005 — Cardboard packaging material
+Value used: 0.70 kg CO2e per kg material
+Use in this report: Cardboard cartons and labels
+Factor status: Synthetic blended cradle-to-gate demonstration factor
+Confidence: Low
+
+EF-006 — Organic waste treatment
+Value used: 0.50 kg CO2e per kg waste
+Use in this report: Organic residue sent to an assumed external landfill route
+Factor status: Synthetic demonstration factor; actual factor depends strongly on
+  treatment route, landfill-gas capture and material composition.
+Confidence: Low
+
+EF-007 — Third-party road freight
+Value used: 0.10 kg CO2e per tonne-km
+Use in this report: Finished-product transportation
+Factor status: Synthetic demonstration factor; actual factor depends on vehicle,
+  fuel, load, utilization and route.
+Confidence: Low
+
+======================================================================
+5. LINE-ITEM EMISSIONS CALCULATIONS
+======================================================================
+
+SOURCE 1 — PURCHASED GRID ELECTRICITY
+Source ID: SRC-001
+Process/equipment: Chilling, cold rooms, pumps, motors, filling, compressed air,
+  lighting and electric forklift charging
+Source family: Purchased energy
+Scope: Scope 2
+Identification status: Confirmed at activity level
+Activity data: 50,000 kWh
+Emission factor: 0.675 kg CO2e/kWh (EF-001)
+Calculation: 50,000 x 0.675
+Calculated emissions: 33,750 kg CO2e = 33.750 tCO2e
+Contribution to partial total: 55.38%
+Activity-data confidence: High
+Factor confidence: Medium
+
+SOURCE 2 — DIESEL COMBUSTION IN STEAM BOILER
+Source ID: SRC-002
+Process/equipment: Steam boiler for pasteurization and process heating
+Source family: Stationary combustion
+Scope: Scope 1
+Identification status: Confirmed
+Activity data: 4,000 litres diesel
+Emission factor: 2.68 kg CO2e/litre (EF-002)
+Calculation: 4,000 x 2.68
+Calculated emissions: 10,720 kg CO2e = 10.720 tCO2e
+Contribution to partial total: 17.59%
+Activity-data confidence: High
+Factor confidence: Medium
+
+SOURCE 3 — DIESEL COMBUSTION IN BACKUP GENERATOR
+Source ID: SRC-003
+Process/equipment: Backup generator used during grid outages
+Source family: Stationary combustion
+Scope: Scope 1
+Identification status: Confirmed
+Activity data: 500 litres diesel
+Emission factor: 2.68 kg CO2e/litre (EF-002)
+Calculation: 500 x 2.68
+Calculated emissions: 1,340 kg CO2e = 1.340 tCO2e
+Contribution to partial total: 2.20%
+Activity-data confidence: Medium
+Factor confidence: Medium
+
+SOURCE 4 — DIESEL COMBUSTION IN COMPANY DELIVERY VANS
+Source ID: SRC-004
+Process/equipment: Two company-owned delivery vans
+Source family: Mobile combustion
+Scope: Scope 1
+Identification status: Confirmed
+Activity data: 800 litres diesel
+Emission factor: 2.68 kg CO2e/litre (EF-002)
+Calculation: 800 x 2.68
+Calculated emissions: 2,144 kg CO2e = 2.144 tCO2e
+Contribution to partial total: 3.52%
+Activity-data confidence: Medium
+Factor confidence: Medium
+
+SOURCE 5 — R-134a REFRIGERANT RELEASE
+Source ID: SRC-008
+Process/equipment: Milk chilling unit and two cold rooms
+Source family: Fugitive emissions
+Scope: Scope 1
+Identification status: Confirmed from sample service record
+Activity data: 3 kg R-134a added during servicing
+Sample assumption: Refrigerant added is treated as refrigerant released
+Emission factor: 1,430 kg CO2e/kg (EF-003)
+Calculation: 3 x 1,430
+Calculated emissions: 4,290 kg CO2e = 4.290 tCO2e
+Contribution to partial total: 7.04%
+Activity-data confidence: Medium
+Factor confidence: Medium
+
+SOURCE 6 — PLASTIC PACKAGING MATERIALS
+Source ID: SRC-005A
+Process/equipment: Product filling, sealing and packaging
+Source family: Purchased goods and services
+Scope: Scope 3
+Identification status: Confirmed at material-category level
+Activity data: 2,000 kg mixed plastic packaging
+Emission factor: 2.50 kg CO2e/kg (EF-004)
+Calculation: 2,000 x 2.50
+Calculated emissions: 5,000 kg CO2e = 5.000 tCO2e
+Contribution to partial total: 8.20%
+Activity-data confidence: Medium
+Factor confidence: Low
+
+SOURCE 7 — CARDBOARD PACKAGING MATERIALS
+Source ID: SRC-005B
+Process/equipment: Product packaging
+Source family: Purchased goods and services
+Scope: Scope 3
+Identification status: Confirmed at material-category level
+Activity data: 1,000 kg cardboard cartons and labels
+Emission factor: 0.70 kg CO2e/kg (EF-005)
+Calculation: 1,000 x 0.70
+Calculated emissions: 700 kg CO2e = 0.700 tCO2e
+Contribution to partial total: 1.15%
+Activity-data confidence: Medium
+Factor confidence: Low
+
+SOURCE 8 — ORGANIC WASTE SENT TO EXTERNAL TREATMENT
+Source ID: SRC-006
+Process/equipment: Production residue and rejected dairy material
+Source family: Waste generated in operations
+Scope: Scope 3
+Identification status: Confirmed activity; treatment route assumed for demo
+Activity data: 3,000 kg organic waste
+Emission factor: 0.50 kg CO2e/kg (EF-006)
+Calculation: 3,000 x 0.50
+Calculated emissions: 1,500 kg CO2e = 1.500 tCO2e
+Contribution to partial total: 2.46%
+Activity-data confidence: Medium
+Factor confidence: Low
+
+SOURCE 9 — THIRD-PARTY FINISHED-PRODUCT TRANSPORTATION
+Source ID: SRC-007
+Process/equipment: External road-freight carriers
+Source family: Downstream transportation and distribution
+Scope: Scope 3
+Identification status: Confirmed at activity level
+Activity data: 15,000 tonne-km
+Emission factor: 0.10 kg CO2e/tonne-km (EF-007)
+Calculation: 15,000 x 0.10
+Calculated emissions: 1,500 kg CO2e = 1.500 tCO2e
+Contribution to partial total: 2.46%
+Activity-data confidence: Medium
+Factor confidence: Low
+
+======================================================================
+6. EMISSIONS SUMMARY BY SCOPE
+======================================================================
+
+Scope 1 — Direct controlled emissions
+- Diesel boiler:                       10.720 tCO2e
+- Diesel generator:                     1.340 tCO2e
+- Company delivery vans:                2.144 tCO2e
+- R-134a refrigerant release:            4.290 tCO2e
+Scope 1 subtotal:                       18.494 tCO2e
+Share of partial inventory:             30.35%
+
+Scope 2 — Purchased energy
+- Purchased grid electricity:          33.750 tCO2e
+Scope 2 subtotal:                       33.750 tCO2e
+Share of partial inventory:             55.38%
+
+Selected Scope 3 — Partial value-chain coverage
+- Plastic packaging:                    5.000 tCO2e
+- Cardboard packaging:                  0.700 tCO2e
+- Organic waste treatment:              1.500 tCO2e
+- Third-party product transport:         1.500 tCO2e
+Selected Scope 3 subtotal:               8.700 tCO2e
+Share of partial inventory:             14.28%
+
+PARTIAL INVENTORY TOTAL:                60.944 tCO2e
+
+Reconciliation check:
+18.494 + 33.750 + 8.700 = 60.944 tCO2e
+
+======================================================================
+7. RANKED EMISSION SOURCES
+======================================================================
+
+Rank  Source                                      tCO2e       Share
+----  ----------------------------------------  ---------  ---------
+1     Purchased grid electricity                 33.750       55.38%
+2     Diesel combustion in steam boiler          10.720       17.59%
+3     Plastic packaging materials                 5.000        8.20%
+4     R-134a refrigerant release                   4.290        7.04%
+5     Company-owned diesel delivery vans           2.144        3.52%
+6     Organic waste treatment                      1.500        2.46%
+7     Third-party product transportation           1.500        2.46%
+8     Diesel combustion in backup generator        1.340        2.20%
+9     Cardboard packaging materials                0.700        1.15%
+                                                    -----      -------
+      TOTAL                                       60.944      100.00%
+
+Top-three quantified sources:
+1. Purchased grid electricity
+2. Diesel combustion in the steam boiler
+3. Plastic packaging materials
+
+Combined contribution of top three:
+55.38% + 17.59% + 8.20% = 81.17% of the partial inventory total
+
+Important interpretation:
+The ranking applies only to quantified sources. A currently unquantified source,
+such as purchased raw milk, could materially change the ranking after data is added.
+
+======================================================================
+8. EMISSIONS INTENSITY
+======================================================================
+
+Partial inventory total: 60.944 tCO2e
+Production quantity: 3,000 tonnes finished product
+
+Calculation:
+60.944 tCO2e / 3,000 tonnes product
+
+Partial emissions intensity:
+0.02031 tCO2e per tonne of product
+= 20.31 kg CO2e per tonne of product
+
+This is not a complete product carbon footprint. It is a facility-level partial
+inventory intensity based only on the quantified sources in this report.
+
+======================================================================
+9. IDENTIFIED BUT NOT QUANTIFIED SOURCES
+======================================================================
+
+SOURCE U-001 — Purchased raw milk and other raw materials
+Provisional scope: Scope 3
+Reason not quantified: Supplier quantities and supplier-specific/upstream factors
+are incomplete.
+Potential significance: High; could materially alter the Scope 3 total and ranking.
+Required data: Material quantity, supplier, sourcing region and suitable factor.
+
+SOURCE U-002 — Supplier transportation of raw milk
+Provisional scope: Scope 3
+Reason not quantified: Distance, load, vehicle and responsibility are missing.
+Potential significance: Medium.
+Required data: Tonne-km or shipment mass, route and vehicle/fuel type.
+
+SOURCE U-003 — Wastewater-treatment emissions
+Provisional scope: Scope 1 or Scope 3 depending on operational control
+Reason not quantified: Treatment technology, volume and wastewater characteristics
+are missing.
+Potential significance: Unknown.
+Required data: Volume, treatment method, COD/BOD or appropriate process data,
+onsite/offsite control and sludge route.
+
+SOURCE U-004 — Wastewater sludge treatment/disposal
+Provisional scope: Depends on treatment route and operational control
+Reason not quantified: Sludge quantity and destination are missing.
+Potential significance: Unknown.
+Required data: Sludge mass, treatment, transport and destination.
+
+SOURCE U-005 — Cleaning chemicals and sanitizers
+Provisional scope: Scope 3
+Reason not quantified: Chemical identities, quantities and suitable factors missing.
+Potential significance: Low to unknown.
+Required data: Chemical type, quantity, supplier and factor.
+
+SOURCE U-006 — Employee commuting and business travel
+Provisional scope: Scope 3
+Reason not quantified: Not supplied in the company profile.
+Potential significance: Unknown.
+Required data: Travel mode, distance and frequency.
+
+SOURCE U-007 — Capital goods
+Provisional scope: Scope 3
+Reason not quantified: Purchases and capital-equipment data were not supplied.
+Potential significance: Variable.
+Required data: Capital purchases, spend or asset-specific information.
+
+======================================================================
+10. SOURCES CHECKED BUT NOT IDENTIFIED
+======================================================================
+
+- Coal combustion: Not reported; requires company confirmation
+- Natural-gas combustion: Not reported; requires company confirmation
+- LPG combustion: Not reported; requires company confirmation
+- Biomass combustion: Not reported; requires company confirmation
+- Purchased steam, heat or cooling: Not reported
+- Fire-suppression gas release: Not reported
+- Other industrial-gas release: Not reported
+- Direct chemical/process reaction emissions: Not identified from current process
+  description; explicit operational confirmation still required
+
+“Not identified” does not prove that the source is absent. It means the current
+profile and evidence do not establish its presence.
+
+======================================================================
+11. DATA QUALITY AND CONFIDENCE
+======================================================================
+
+High-confidence activity data:
+- Purchased electricity
+- Boiler diesel
+
+Medium-confidence activity data:
+- Generator diesel
+- Delivery-van diesel
+- Refrigerant service quantity
+- Plastic and cardboard quantities
+- Organic-waste quantity
+- Third-party tonne-km
+
+Low-confidence or demonstration factors:
+- Plastic packaging
+- Cardboard packaging
+- Organic-waste treatment
+- Third-party freight
+
+Main uncertainty drivers:
+- Selective Scope 3 coverage
+- Synthetic material, waste and freight factors
+- Assumed organic-waste treatment route
+- Refrigerant refill-to-release assumption
+- Missing supplier and wastewater data
+
+Result confidence by scope:
+- Scope 1: Medium
+- Scope 2: Medium to high for activity data; factor methodology must be reviewed
+- Selected Scope 3: Low to medium
+- Overall partial inventory: Medium
+- Complete corporate footprint: Not available
+
+======================================================================
+12. ML AND RULE-ENGINE TRACEABILITY
+======================================================================
+
+ML engine contributions:
+- Extracted “cold rooms” and “milk chilling” from the company description.
+- Suggested refrigerant leakage as a potential fugitive source.
+- Extracted packaging and third-party transportation entities.
+- Flagged missing wastewater and supplier-transport information.
+- Generated follow-up verification questions.
+
+Rule-engine contributions:
+- Diesel boiler -> stationary combustion candidate
+- Diesel generator -> stationary combustion candidate
+- Company-owned diesel vans -> mobile combustion candidate
+- Purchased electricity -> Scope 2 candidate
+- Refrigeration equipment -> refrigerant verification requirement
+- Purchased packaging -> purchased-goods candidate
+- External waste contractor -> waste-treatment pathway verification
+- Third-party carrier -> transportation Scope 3 candidate
+
+Calculation-engine contribution:
+- Applied compatible activity data, units and factors.
+- Calculated line-item emissions.
+- Aggregated emissions by scope.
+- Calculated percentages and ranked quantified sources.
+
+Final-control rule:
+ML did not independently create an emission value. All numerical results were
+produced by the deterministic calculation engine from stored activity data and
+factor records.
+
+======================================================================
+13. REQUIRED ACTIONS BEFORE FINALIZING THE INVENTORY
+======================================================================
+
+1. Obtain complete raw-material and supplier data.
+2. Confirm supplier-side milk transportation.
+3. Verify the wastewater-treatment process and sludge route.
+4. Confirm all onsite fuels and direct process-emission mechanisms.
+5. Verify refrigerant type, charge and service records.
+6. Replace all synthetic factors with approved production factors.
+7. Verify the organic-waste treatment route.
+8. Complete employee commuting, business travel and capital-goods screening.
+9. Review the organizational and Scope 3 boundaries.
+10. Recalculate and issue a new version after closing material gaps.
+
+======================================================================
+14. FINAL REPORT CONCLUSION
+======================================================================
+
+The identification layer identified nine sources with sufficient demonstration
+data for calculation and seven additional sources requiring data or verification.
+
+The deterministic calculation engine calculated a PARTIAL inventory total of:
+
+                         60.944 tCO2e
+
+Within the quantified partial inventory:
+- Purchased grid electricity is the largest source at 55.38%.
+- The diesel-fired steam boiler is the second-largest source at 17.59%.
+- Plastic packaging is the third-largest source at 8.20%.
+- The top three sources represent 81.17% of quantified emissions.
+
+This is not the company’s complete carbon footprint because material upstream
+emissions, supplier transport, wastewater, chemicals and other Scope 3 sources
+remain incomplete. The missing sources must stay visible and the report must not
+present the 60.944 tCO2e value as a complete corporate total.
+
+END OF SAMPLE FINAL EMISSIONS REPORT

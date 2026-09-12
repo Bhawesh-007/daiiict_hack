@@ -1,0 +1,320 @@
+EMISSIONLENS — IDENTIFICATION LAYER OUTPUT
+Possible Emission Source Register
+
+Assessment ID: ID-RUN-2026-0001
+Company: Sunrise Foods and Cold Chain Pvt. Ltd. (synthetic example)
+Facility: Ahmedabad manufacturing facility
+Company type: MSME
+Industry: Food processing
+Sub-industry: Dairy and packaged food
+Products: Pasteurized milk, yogurt and flavoured dairy drinks
+Reporting period: April 2025 to March 2026
+
+IMPORTANT:
+- This output identifies possible emission sources only.
+- It does not calculate carbon emissions.
+- It does not provide circular interventions.
+- “Potential” and “missing information” do not mean that emissions are zero.
+
+======================================================================
+A. CONFIRMED / PROVISIONALLY CONFIRMED EMISSION SOURCES
+======================================================================
+
+1. PURCHASED GRID ELECTRICITY
+   Source family: Purchased energy
+   Provisional scope: Scope 2
+   Related operations:
+   - Milk chilling
+   - Finished-goods cold rooms
+   - Pumps and motors
+   - Homogenizer
+   - Filling and sealing machines
+   - Compressed-air system
+   - Lighting
+   - Electric forklift charging
+   Identification status: Confirmed at activity level
+   Why identified: The company reported electricity-consuming equipment and
+   provided selected electricity bills.
+   Verification still required: Complete electricity bills or meter records for
+   the reporting period and separate renewable generation, if present.
+
+2. DIESEL COMBUSTION IN STEAM BOILER
+   Source family: Stationary combustion
+   Provisional scope: Scope 1
+   Related process: Pasteurization and process heating
+   Related equipment: Diesel-fired steam boiler
+   Identification status: Confirmed at activity level
+   Why identified: The boiler and diesel use were explicitly reported.
+   Verification still required: Boiler ownership/control, operating logs and
+   boiler-specific diesel records.
+
+3. DIESEL COMBUSTION IN BACKUP GENERATOR
+   Source family: Stationary combustion
+   Provisional scope: Scope 1
+   Related process: Backup electricity generation during grid outages
+   Related equipment: Diesel generator
+   Identification status: Confirmed at activity level
+   Why identified: A diesel generator was explicitly included in the equipment list.
+   Verification still required: Generator operating hours and generator-specific
+   diesel records.
+
+4. DIESEL COMBUSTION IN COMPANY-OWNED DELIVERY VANS
+   Source family: Mobile combustion
+   Provisional scope: Scope 1
+   Related process: Finished-product delivery
+   Related equipment: Two diesel delivery vans
+   Identification status: Provisionally confirmed
+   Why identified: Company-owned diesel vehicles were declared.
+   Verification still required: Operational control, fuel records, distance and
+   vehicle details.
+
+5. PURCHASED PACKAGING MATERIALS
+   Source family: Purchased materials
+   Provisional scope: Scope 3 candidate
+   Related process: Filling, sealing and packaging
+   Possible underlying sources:
+   - Plastic cups and containers
+   - Plastic lids and seals
+   - Cardboard cartons
+   - Printed labels
+   Identification status: Confirmed at material-category level
+   Why identified: Packaging materials were explicitly declared.
+   Verification still required: Material type, monthly mass, recycled content,
+   supplier and purchase records.
+
+6. ORGANIC WASTE GENERATED DURING OPERATIONS
+   Source family: Waste generated in operations
+   Provisional scope: Scope 3 candidate if treated externally
+   Related processes: Milk preparation, processing and rejected product handling
+   Possible underlying sources:
+   - Milk residue
+   - Rejected dairy material
+   - Expired or damaged product
+   Identification status: Provisionally confirmed
+   Why identified: Organic residue and an external waste contractor were declared.
+   Verification still required: Waste quantity, contractor, destination and final
+   treatment route.
+
+7. PLASTIC AND CARDBOARD WASTE
+   Source family: Waste generated in operations
+   Provisional scope: Scope 3 candidate if treated externally
+   Related process: Packaging
+   Possible underlying sources:
+   - Rejected plastic containers
+   - Plastic lids and seals
+   - Cardboard waste
+   - Printed-label waste
+   Identification status: Provisionally confirmed
+   Why identified: Packaging waste and external recycling were reported.
+   Verification still required: Quantity, recycler records and verified treatment
+   or recycling route.
+
+8. THIRD-PARTY TRANSPORTATION OF FINISHED PRODUCTS
+   Source family: Downstream transportation and distribution
+   Provisional scope: Scope 3 candidate
+   Related process: Product dispatch
+   Identification status: Confirmed at activity level
+   Why identified: The company reported using third-party carriers.
+   Verification still required: Shipment weight, distance, route, vehicle type,
+   carrier and allocation between company and third-party deliveries.
+
+9. WASTEWATER GENERATION AND TREATMENT
+   Source family: Wastewater
+   Provisional scope: Scope 1 or Scope 3 depending on operational control
+   Related processes:
+   - Cleaning-in-place
+   - Equipment and facility washing
+   - Onsite or external wastewater treatment
+   Identification status: Provisionally confirmed at activity level
+   Why identified: Cleaning wastewater and treatment equipment were reported.
+   Verification still required: Wastewater volume, treatment process, onsite/offsite
+   control, discharge destination and sludge treatment.
+
+======================================================================
+B. POTENTIAL EMISSION SOURCES REQUIRING VERIFICATION
+======================================================================
+
+10. REFRIGERANT LEAKAGE OR RELEASE
+    Source family: Fugitive emissions
+    Provisional scope: Scope 1 if refrigeration equipment is owned/controlled
+    Related equipment:
+    - Milk chilling unit
+    - Two finished-goods cold rooms
+    Identification status: Potential
+    Why identified: Refrigeration equipment is present, but refrigerant information
+    was not supplied.
+    Detection method: Industry template + rule engine + ML extraction of “cold room”
+    Verification required:
+    - Refrigerant type
+    - Refrigerant charge
+    - Refrigerant added or removed
+    - Leakage and maintenance records
+
+11. EMISSIONS FROM WASTEWATER TREATMENT
+    Source family: Process/fugitive wastewater emissions
+    Provisional scope: Depends on treatment method and operational control
+    Related process: Treatment of cleaning-in-place wastewater
+    Identification status: Potential
+    Why identified: Wastewater is generated, but the treatment technology is unknown.
+    Verification required:
+    - Aerobic or anaerobic treatment
+    - Onsite or external treatment
+    - Treatment volume
+    - Sludge route
+
+12. SUPPLIER TRANSPORTATION OF RAW MILK
+    Source family: Upstream transportation and distribution
+    Provisional scope: Scope 3 candidate
+    Related process: Raw-material receipt
+    Identification status: Potential
+    Why identified: Raw milk is delivered by suppliers, but transport responsibility
+    and records were not supplied.
+    Verification required:
+    - Who arranges transportation
+    - Distance and route
+    - Vehicle and fuel type
+    - Quantity transported
+
+13. OTHER ONSITE FUEL COMBUSTION
+    Source family: Stationary or mobile combustion
+    Provisional scope: Scope 1 if owned/controlled
+    Possible fuels:
+    - LPG
+    - Natural gas
+    - Coal
+    - Biomass
+    - Petrol
+    - Other liquid or gaseous fuels
+    Identification status: Missing information
+    Why identified: The universal fuel checklist has not been fully answered.
+    Verification required: Complete facility fuel inventory and purchase records.
+
+14. INDUSTRIAL PROCESS EMISSIONS
+    Source family: Industrial process emissions
+    Provisional scope: Scope 1 when generated by an onsite controlled process
+    Possible mechanism: Chemical, biological or physical transformation that directly
+    releases greenhouse gases
+    Identification status: Missing information / not currently identified
+    Why identified: No direct process-emission mechanism was disclosed, but the
+    universal checklist requires explicit confirmation.
+    Verification required: Confirm whether fermentation, chemical reactions,
+    treatment chemicals or other transformations release greenhouse gases.
+
+15. WASTEWATER SLUDGE TREATMENT OR DISPOSAL
+    Source family: Waste generated in operations
+    Provisional scope: Depends on onsite/offsite treatment and control
+    Related process: Wastewater treatment
+    Identification status: Potential
+    Why identified: Wastewater-treatment equipment was reported, but the sludge route
+    was not provided.
+    Verification required: Sludge quantity, treatment, transport and destination.
+
+16. CLEANING-CHEMICAL AND SANITIZER SUPPLY
+    Source family: Purchased goods and services
+    Provisional scope: Scope 3 candidate
+    Related process: Cleaning-in-place and sanitation
+    Identification status: Potential at material level
+    Why identified: Cleaning chemicals and sanitizing agents were declared without
+    quantities or supplier information.
+    Verification required: Chemical type, quantity, supplier and purchase record.
+
+17. RAW-MILK AND OTHER PURCHASED RAW MATERIALS
+    Source family: Purchased goods and services
+    Provisional scope: Scope 3 candidate
+    Related process: Raw-material sourcing and receipt
+    Identification status: Confirmed at material-category level; upstream source
+    details are missing
+    Why identified: Raw milk is the facility’s primary purchased input.
+    Verification required: Quantity, supplier information, sourcing boundary and
+    available supplier-specific data.
+
+18. ONSITE RENEWABLE-ENERGY EQUIPMENT OR PURCHASED RENEWABLE ELECTRICITY
+    Source family: Energy-source attribute; used to separate grid and renewable supply
+    Provisional scope: Relevant to Scope 2 accounting later
+    Identification status: Unknown
+    Why identified: Rooftop solar and renewable purchases were not confirmed.
+    Verification required: Solar installation details, generation meter, electricity
+    contract and renewable-energy certificates if applicable.
+
+======================================================================
+C. OUTSOURCED ACTIVITIES TO KEEP VISIBLE
+======================================================================
+
+19. RAW-MILK PRODUCTION AT SUPPLIER FACILITIES
+    Status: Outsourced/value-chain activity
+    Possible source families: Livestock, energy, feed, land and agricultural inputs
+    Current treatment: Record as an upstream source area; do not infer individual
+    farm sources without supplier information.
+
+20. MANUFACTURE OF PLASTIC AND CARDBOARD PACKAGING
+    Status: Outsourced/value-chain activity
+    Possible source families: Material production, energy, process and transport
+    Current treatment: Record as purchased-material activity until supplier details
+    are available.
+
+21. EXTERNAL ORGANIC-WASTE TREATMENT
+    Status: Outsourced; treatment route unknown
+    Possible source families: Landfill, composting, anaerobic digestion, incineration
+    or another treatment process
+    Current treatment: Do not select a pathway until contractor evidence is supplied.
+
+22. EXTERNAL RECYCLING OR DISPOSAL OF PACKAGING WASTE
+    Status: Outsourced; treatment route requires verification
+    Possible source families: Recycling, landfill, incineration or transport
+    Current treatment: Record as unresolved until recycler and destination evidence
+    are supplied.
+
+======================================================================
+D. SOURCES NOT IDENTIFIED FROM THE CURRENT PROFILE
+======================================================================
+
+The following were not identified, but should remain explicitly checked:
+- Purchased steam, heat or cooling
+- Coal combustion
+- Natural-gas combustion
+- LPG combustion
+- Biomass combustion
+- Company-controlled heavy trucks
+- Fire-suppression gas releases
+- Other industrial-gas releases
+- Employee commuting
+- Business travel
+- Capital-goods emissions
+- Leased assets outside the selected facility boundary
+
+“Not identified” means the supplied profile did not show the source. It does not
+prove that the source is absent.
+
+======================================================================
+E. IDENTIFICATION-LAYER FINAL STATUS
+======================================================================
+
+Ready for later activity-data collection:
+- Purchased grid electricity
+- Diesel boiler
+- Diesel generator
+- Company-owned delivery vans
+- Purchased packaging materials
+- Organic waste
+- Packaging waste
+- Third-party product transportation
+- Wastewater generation
+
+Must be resolved before the source inventory is considered complete:
+- Refrigerant leakage
+- Wastewater-treatment method
+- Supplier transportation
+- Other onsite fuels
+- Direct industrial process emissions
+- Wastewater sludge treatment
+- Cleaning chemicals
+- Raw-material supplier data
+- Renewable-energy status
+- Final waste and recycling routes
+
+FINAL RESULT:
+The identification layer has produced a preliminary and traceable list of possible
+emission sources. The inventory remains incomplete until the company answers the
+verification questions and provides the missing operational evidence.
+
+END OF FILE

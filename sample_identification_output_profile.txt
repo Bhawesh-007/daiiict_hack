@@ -1,0 +1,255 @@
+EMISSION SOURCE IDENTIFICATION OUTPUT
+Working product: EmissionLens
+Assessment type: Preliminary source inventory
+Status: Synthetic demonstration output
+Calculation status: Not calculated
+Recommendation status: Not generated
+
+======================================================================
+1. ASSESSMENT CONTEXT
+======================================================================
+
+Facility: Sunrise Foods and Cold Chain Pvt. Ltd. — Ahmedabad facility
+Company type: MSME
+Industry: Food processing
+Sub-industry: Dairy and packaged food
+Products: Pasteurized milk, yogurt and flavoured dairy drinks
+Reporting period: April 2025 to March 2026
+Facility boundary: Activities physically performed and controlled onsite
+Industry template used: Food Processing v1.0
+Identification run: ID-RUN-2026-0001
+
+======================================================================
+2. IDENTIFICATION SUMMARY
+======================================================================
+
+Process steps reviewed: 10
+Equipment/assets reviewed: 14
+Universal source families reviewed: 10
+Confirmed/provisionally confirmed sources: 7
+Potential sources requiring verification: 4
+Missing-information source families: 2
+Outsourced sources/activities: 3
+Not-applicable source families: 1
+
+Overall identification completeness: Partial
+Overall identification confidence: Medium
+Reason: Core processes and equipment were supplied, but refrigerant,
+wastewater, material, transport and treatment details remain incomplete.
+
+======================================================================
+3. CONFIRMED OR PROVISIONALLY CONFIRMED SOURCES
+======================================================================
+
+SOURCE ID: SRC-001
+Status: Confirmed by company operational description
+Source: Purchased grid electricity
+Source family: Purchased energy
+Related process/equipment: Chilling, cold rooms, pumps, motors, filling,
+  compressed air, lighting and electric forklift
+Provisional scope: Scope 2
+Why identified: Company states that these systems use purchased electricity
+Evidence available: Selected electricity bills; equipment list
+Evidence level: A/B — documentary and operational record
+Future activity data required: Monthly electricity consumption in kWh;
+  separate onsite renewable generation if available
+Verification action: Confirm the complete reporting-period meter/bill record
+
+SOURCE ID: SRC-002
+Status: Confirmed by company operational description
+Source: Diesel combustion in steam boiler
+Source family: Stationary combustion
+Related process/equipment: Pasteurization and heating; diesel-fired boiler
+Provisional scope: Scope 1, subject to ownership/control confirmation
+Why identified: Boiler and diesel fuel use explicitly declared
+Evidence available: Equipment list; diesel purchase invoices
+Evidence level: A/B — documentary and operational record
+Future activity data required: Monthly boiler diesel consumption in litres;
+  boiler operating hours and fuel records
+Verification action: Confirm boiler ownership, fuel allocation and operating log
+
+SOURCE ID: SRC-003
+Status: Confirmed by company operational description
+Source: Diesel combustion in backup generator
+Source family: Stationary combustion
+Related process/equipment: Diesel generator used during grid outages
+Provisional scope: Scope 1, subject to ownership/control confirmation
+Why identified: Backup generator explicitly declared
+Evidence available: Equipment list; diesel purchase invoices
+Evidence level: B — operational record
+Future activity data required: Generator-specific diesel use and operating hours
+Verification action: Request generator log and separate fuel allocation
+
+SOURCE ID: SRC-004
+Status: Confirmed by company operational description
+Source: Diesel combustion in company-owned delivery vans
+Source family: Mobile combustion
+Related process/equipment: Two company-owned delivery vans
+Provisional scope: Scope 1, subject to operational-control confirmation
+Why identified: Company-owned diesel delivery vans declared
+Evidence available: Asset list; vehicle/fuel records not yet complete
+Evidence level: B/C — operational record and user confirmation
+Future activity data required: Vehicle fuel, distance, vehicle type and route
+Verification action: Confirm whether the vans operate inside the assessment
+  boundary and obtain vehicle fuel records
+
+SOURCE ID: SRC-005
+Status: Confirmed by company operational description
+Source: Purchased plastic and cardboard packaging materials
+Source family: Purchased materials
+Related process/equipment: Filling, sealing and packaging
+Provisional scope: Scope 3 candidate
+Why identified: Plastic containers, lids, seals, cartons and labels declared
+Evidence available: Material list; purchase records not yet complete
+Evidence level: B/C — operational record and user confirmation
+Future activity data required: Monthly mass by material; virgin/recycled content;
+  supplier-specific information where available
+Verification action: Request packaging purchase records and specifications
+
+SOURCE ID: SRC-006
+Status: Confirmed by company operational description
+Source: Organic residue generated during operations
+Source family: Waste generated in operations
+Related process/equipment: Milk residue and rejected organic material
+Provisional scope: Scope 3 candidate; treatment boundary to be verified
+Why identified: Organic residue and external waste contractor declared
+Evidence available: Waste-contractor contact details
+Evidence level: C — user confirmation
+Future activity data required: Monthly quantity, collection frequency and final
+  treatment route
+Verification action: Request contractor receipts and treatment destination
+
+SOURCE ID: SRC-007
+Status: Confirmed at activity/category level
+Source: Third-party transportation of finished products
+Source family: Transportation and distribution
+Related process/equipment: External carriers dispatch part of finished goods
+Provisional scope: Scope 3 candidate
+Why identified: Third-party carriers explicitly declared
+Evidence available: Carrier information partially available
+Evidence level: C — user confirmation
+Future activity data required: Shipment mass, distance, vehicle type and route
+Verification action: Confirm carrier records and allocation of company versus
+  third-party deliveries
+
+======================================================================
+4. POTENTIAL SOURCES REQUIRING VERIFICATION
+======================================================================
+
+SOURCE ID: SRC-008
+Status: Potential — not confirmed
+Source: Refrigerant release or leakage
+Source family: Fugitive emissions
+Related process/equipment: Milk chilling unit and two cold rooms
+Provisional scope: Scope 1 if equipment is owned/controlled
+Why identified: Refrigeration equipment is present; refrigerant details absent
+Detection origin: Rule engine + ML text extraction from “cold rooms”
+Evidence available: Cold-room maintenance contract only
+Evidence level: D/C — inference plus partial user information
+Required verification: Refrigerant type, charge, refill and service records
+Next question: Was refrigerant added, removed or lost during the period?
+
+SOURCE ID: SRC-009
+Status: Potential — not confirmed
+Source: Wastewater-treatment emissions
+Source family: Wastewater
+Related process/equipment: Cleaning-in-place and wastewater-treatment equipment
+Provisional scope: Depends on ownership/control and treatment method
+Why identified: Cleaning wastewater and treatment equipment declared
+Detection origin: Universal checklist + process-flow mapping
+Evidence available: Onsite treatment equipment mentioned; method absent
+Evidence level: C — user confirmation
+Required verification: Treatment process, volume, discharge route and sludge route
+Next question: Is treatment fully onsite, partially onsite or offsite?
+
+SOURCE ID: SRC-010
+Status: Potential — not confirmed
+Source: Supplier-side transportation of raw milk
+Source family: Upstream transportation
+Related process/equipment: Supplier delivery of raw milk
+Provisional scope: Scope 3 candidate
+Why identified: Raw milk is received from suppliers; transport responsibility unknown
+Detection origin: Process-flow mapping + outsourcing question
+Evidence available: None
+Evidence level: D — process inference
+Required verification: Supplier responsibility, route, distance, vehicle and load
+Next question: Who arranges and pays for raw-milk transportation?
+
+SOURCE ID: SRC-011
+Status: Potential — not confirmed
+Source: LPG, natural gas, biomass or other backup fuel
+Source family: Stationary combustion
+Related process/equipment: Boiler, generator or auxiliary equipment
+Why identified: Universal checklist found fuel type incomplete
+Detection origin: Universal checklist
+Evidence available: Diesel use declared; other fuel use unknown
+Evidence level: D — unresolved checklist gap
+Required verification: Complete list of all fuels used onsite
+Next question: Is any LPG, natural gas, biomass or other fuel used anywhere?
+
+======================================================================
+5. OUTSOURCED ACTIVITIES
+======================================================================
+
+OUT-001
+Activity: Raw milk production and supplier-side operations
+Status: Outsourced
+Reason: Performed by suppliers before receipt at the facility
+Future requirement: Supplier and value-chain data if included later
+
+OUT-002
+Activity: Third-party transport of finished products
+Status: Outsourced
+Reason: External carriers transport part of finished goods
+Future requirement: Carrier, route, distance, vehicle and shipment data
+
+OUT-003
+Activity: Organic-residue collection and treatment
+Status: Outsourced, treatment route incomplete
+Reason: External waste contractor collects organic residue
+Future requirement: Contractor receipt and final treatment/disposal route
+
+======================================================================
+6. UNIVERSAL SOURCE-CHECKLIST RESULTS
+======================================================================
+
+Stationary combustion: Present — boiler and generator confirmed; other fuels
+  require verification
+Mobile combustion: Present — company-owned diesel vans confirmed
+Purchased electricity/energy: Present — grid electricity confirmed
+Industrial process emissions: Not identified from supplied information;
+  confirm whether any chemical or material transformation releases gases
+Fugitive releases: Potential — refrigeration present, refrigerant unknown
+Purchased materials: Present — plastic/cardboard packaging identified
+Transportation: Present — company vans and third-party carriers identified
+Waste: Present — organic, plastic, cardboard and treatment residue identified
+Wastewater: Potential — CIP wastewater and treatment equipment identified
+Outsourced production: Present — supplier and external carrier activities recorded
+
+======================================================================
+7. HIGH-PRIORITY INFORMATION GAPS
+======================================================================
+
+1. Confirm and correct the complete onsite fuel list.
+2. Provide refrigerant type and maintenance/refill records.
+3. Confirm whether wastewater treatment is onsite and document the method.
+4. Provide final treatment routes for organic, plastic and cardboard waste.
+5. Separate boiler, generator and vehicle fuel consumption.
+6. Provide packaging-material quantities and recycled/virgin content.
+7. Provide company and third-party transport responsibility and route data.
+8. Confirm whether any industrial process emissions occur.
+9. Confirm onsite solar or other renewable-energy use.
+
+======================================================================
+8. OUTPUT GUARANTEES
+======================================================================
+
+- No emission quantity has been calculated in this output.
+- No source has been confirmed solely from the industry name.
+- ML suggestions are labelled as potential until verified.
+- Missing information is visible and is not treated as zero.
+- Outsourced activities are separated from directly controlled activities.
+- Every source includes the future activity data needed for quantification.
+- The inventory can be reviewed and amended without deleting its history.
+
+END OF IDENTIFICATION OUTPUT
