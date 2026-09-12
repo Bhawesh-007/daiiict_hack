@@ -75,6 +75,7 @@ def _to_response(
         reporting_period_end=assessment.reporting_period_end,
         organizational_boundary=assessment.organizational_boundary,
         operational_boundary=assessment.operational_boundary,
+        business_constraints=assessment.business_constraints,
         status=assessment.status,
         created_at=assessment.created_at,
         updated_at=assessment.updated_at,

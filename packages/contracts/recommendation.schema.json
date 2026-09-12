@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://emissionlens.local/contracts/layer2-recommendation-candidates-v1.json",
+  "title": "Layer 2 Recommendation Candidates",
+  "description": "Deterministic circular-intervention candidates generated from one finalized Layer 1 profile. Synthetic demo profiles use the same contract.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "engine_version",
+    "catalog_id",
+    "catalog_version",
+    "profile_id",
+    "profile_version",
+    "assessment_id",
+    "status",
+    "phase",
+    "recommendation_count",
+    "recommendations",
+    "excluded_sources",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": { "const": "layer2-recommendation-candidates-v1" },
+    "engine_version": { "type": "string" },
+    "catalog_id": { "type": "string" },
+    "catalog_version": { "type": "string" },
+    "profile_id": { "type": "string", "format": "uuid" },
+    "profile_version": { "type": "integer", "minimum": 1 },
+    "assessment_id": { "type": "string", "format": "uuid" },
+    "status": { "const": "CANDIDATES_READY" },
+    "phase": { "const": "PHASE_2_IMPACT_AND_FEASIBILITY" },
+    "recommendation_count": { "type": "integer", "minimum": 0 },
+    "recommendations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "projected_emissions_kgco2e",
+          "carbon_reduction_kgco2e",
+          "reduction_percentage",
+          "implementation_cost_inr",
+          "annual_savings_inr",
+          "simple_payback_years",
+          "circularity_score",
+          "technical_feasibility_score",
+          "feasibility_score",
+          "feasibility_status",
+          "impact_status"
+        ]
+      }
+    },
+    "excluded_sources": { "type": "array" },
+    "limitations": { "type": "array", "items": { "type": "string" } },
+    "impact_assumption_notice": { "type": "string" }
+  }
+}

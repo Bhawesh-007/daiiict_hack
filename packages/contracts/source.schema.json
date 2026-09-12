@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://emissionlens.local/contracts/source-v1.json",
+  "title": "Layer 1 Source Inventory Item",
+  "type": "object",
+  "required": ["source_id", "source_key", "source_name", "status", "scope", "activity_records"],
+  "properties": {
+    "source_id": { "type": "string", "format": "uuid" },
+    "source_key": { "type": "string", "minLength": 1 },
+    "source_name": { "type": "string", "minLength": 1 },
+    "source_category": { "type": ["string", "null"] },
+    "scope": { "type": ["string", "null"], "enum": ["SCOPE_1", "SCOPE_2", "SCOPE_3", null] },
+    "status": { "type": "string", "enum": ["CONFIRMED", "POTENTIAL", "MISSING_INFORMATION", "NOT_APPLICABLE", "OUTSOURCED"] },
+    "confirmed_source_identity": { "type": "boolean" },
+    "process": { "type": ["object", "null"] },
+    "equipment": { "type": ["object", "null"] },
+    "activity_records": { "type": "array", "items": { "type": "object" } },
+    "baseline_emissions_kgco2e": { "type": ["string", "number", "null"] },
+    "contribution_percentage": { "type": ["string", "number", "null"] },
+    "recommendation_eligible": { "type": "boolean" }
+  }
+}

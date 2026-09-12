@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from decimal import Decimal
-from typing import Literal
+from typing import Any, Literal
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -65,6 +65,7 @@ class AssessmentSeed(StrictModel):
     reporting_period_end: datetime
     organizational_boundary: str | None = Field(default=None, max_length=100)
     operational_boundary: str | None = Field(default=None, max_length=100)
+    business_constraints: dict[str, Any] | None = None
     status: AssessmentStatus = "DRAFT"
 
     @model_validator(mode="after")
@@ -116,6 +117,7 @@ class SingleAssessmentCreate(StrictModel):
     reporting_period_end: datetime
     organizational_boundary: str | None = Field(default=None, max_length=100)
     operational_boundary: str | None = Field(default=None, max_length=100)
+    business_constraints: dict[str, Any] | None = None
     status: AssessmentStatus = "DRAFT"
 
     @model_validator(mode="after")
@@ -175,6 +177,7 @@ class AssessmentResponse(BaseModel):
     reporting_period_end: datetime
     organizational_boundary: str | None
     operational_boundary: str | None
+    business_constraints: dict[str, Any] | None
     status: AssessmentStatus
     created_at: datetime
     updated_at: datetime

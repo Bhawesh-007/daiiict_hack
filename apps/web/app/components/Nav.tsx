@@ -7,10 +7,10 @@ export default function Nav() {
       <span className="brand-copy"><strong>EmissionLens</strong><small>Carbon intelligence</small></span>
     </Link>
     <div className="nav-links">
-      <Link href="/">Overview</Link>
-      <Link href="/processes">Process map</Link>
-      <Link href="/workflow">Source review</Link>
-      <Link href="/calculations">Emissions</Link>
+      <Link href="/workflow">Workflow</Link>
+      <Link href="/">Activity data</Link>
+      <Link href="/calculations">Calculations</Link>
+      <Link href="/recommendations">Recommendations</Link>
     </div>
     <span className="nav-status">Layer 1 active</span>
   </nav>;

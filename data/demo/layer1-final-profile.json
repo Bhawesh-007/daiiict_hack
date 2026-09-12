@@ -1,0 +1,228 @@
+{
+  "schema_version": "layer1-final-profile-v1",
+  "profile_id": "90000000-0000-4000-8000-000000000001",
+  "profile_version": 1,
+  "assessment_id": "90000000-0000-4000-8000-000000000002",
+  "profile_status": "FINALIZED",
+  "synthetic_demo": true,
+  "company": {
+    "company_id": "90000000-0000-4000-8000-000000000010",
+    "name": "Sunrise Foods Demo Pvt. Ltd.",
+    "msme_category": "MEDIUM",
+    "address": "Ahmedabad, Gujarat, India"
+  },
+  "industry": {
+    "name": "Food processing",
+    "code": "food_processing",
+    "template_key": "industry-food-processing-v1",
+    "template_version": "1.0.0"
+  },
+  "facility": {
+    "facility_id": "90000000-0000-4000-8000-000000000011",
+    "name": "Ahmedabad food processing facility",
+    "location": "Ahmedabad, Gujarat, India",
+    "city": "Ahmedabad",
+    "state": "Gujarat",
+    "country": "India",
+    "grid_region": "WESTERN_REGION",
+    "ownership_type": "OWNED"
+  },
+  "products": [
+    {
+      "product_id": "90000000-0000-4000-8000-000000000012",
+      "product_name": "Pasteurized milk and packaged dairy products",
+      "quantity": "3000",
+      "unit": "tonne",
+      "description": "Synthetic annual production quantity"
+    }
+  ],
+  "reporting_period": {
+    "start": "2025-04-01T00:00:00+00:00",
+    "end": "2026-03-31T23:59:59+00:00"
+  },
+  "boundaries": {
+    "organizational": "OPERATIONAL_CONTROL",
+    "operational": "SCOPE_1_SCOPE_2_SELECTED_SCOPE_3"
+  },
+  "processes": [
+    {
+      "process_id": "90000000-0000-4000-8000-000000000020",
+      "name": "Thermal processing",
+      "sequence": 1,
+      "is_outsourced": "NO",
+      "equipment": [
+        {
+          "equipment_id": "90000000-0000-4000-8000-000000000021",
+          "name": "Diesel steam boiler",
+          "equipment_type": "BOILER",
+          "capacity": "2 tonne/hour",
+          "fuel_type": "DIESEL",
+          "energy_type": null,
+          "flows": []
+        }
+      ],
+      "flows": []
+    },
+    {
+      "process_id": "90000000-0000-4000-8000-000000000022",
+      "name": "Cold storage",
+      "sequence": 2,
+      "is_outsourced": "NO",
+      "equipment": [
+        {
+          "equipment_id": "90000000-0000-4000-8000-000000000023",
+          "name": "Cold room refrigeration system",
+          "equipment_type": "COLD_ROOM",
+          "capacity": "500 tonne",
+          "fuel_type": null,
+          "energy_type": "ELECTRICITY",
+          "flows": []
+        }
+      ],
+      "flows": []
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "90000000-0000-4000-8000-000000000030",
+      "source_key": "purchased_grid_electricity",
+      "source_name": "Purchased grid electricity",
+      "source_category": "purchased_energy",
+      "scope": "SCOPE_2",
+      "status": "CONFIRMED",
+      "confirmed_source_identity": true,
+      "activity_records": [{
+        "activity_record_id": "90000000-0000-4000-8000-000000000031",
+        "quantity": "185000",
+        "unit": "kWh",
+        "normalized_quantity": "185000",
+        "normalized_unit": "kWh"
+      }],
+      "baseline_emissions_kgco2e": "124875",
+      "contribution_percentage": "40.40",
+      "calculated_line_count": 1,
+      "recommendation_eligible": true
+    },
+    {
+      "source_id": "90000000-0000-4000-8000-000000000032",
+      "source_key": "purchased_materials",
+      "source_name": "Purchased packaging materials",
+      "source_category": "purchased_goods_services",
+      "scope": "SCOPE_3",
+      "status": "CONFIRMED",
+      "confirmed_source_identity": true,
+      "activity_records": [{
+        "activity_record_id": "90000000-0000-4000-8000-000000000033",
+        "quantity": "60000",
+        "unit": "kg",
+        "normalized_quantity": "60000",
+        "normalized_unit": "kg"
+      }],
+      "baseline_emissions_kgco2e": "105000",
+      "contribution_percentage": "33.96",
+      "calculated_line_count": 1,
+      "recommendation_eligible": true
+    },
+    {
+      "source_id": "90000000-0000-4000-8000-000000000034",
+      "source_key": "stationary_fuel_combustion",
+      "source_name": "Stationary fuel combustion",
+      "source_category": "stationary_combustion",
+      "scope": "SCOPE_1",
+      "status": "CONFIRMED",
+      "confirmed_source_identity": true,
+      "process": {"process_id": "90000000-0000-4000-8000-000000000020", "name": "Thermal processing"},
+      "equipment": {"equipment_id": "90000000-0000-4000-8000-000000000021", "name": "Diesel steam boiler", "equipment_type": "BOILER"},
+      "activity_records": [{
+        "activity_record_id": "90000000-0000-4000-8000-000000000035",
+        "quantity": "12500",
+        "unit": "litre",
+        "normalized_quantity": "12500",
+        "normalized_unit": "litre"
+      }],
+      "baseline_emissions_kgco2e": "33500",
+      "contribution_percentage": "10.84",
+      "calculated_line_count": 1,
+      "recommendation_eligible": true
+    },
+    {
+      "source_id": "90000000-0000-4000-8000-000000000036",
+      "source_key": "refrigerant_fugitive_emissions",
+      "source_name": "Refrigerant leakage and release",
+      "source_category": "fugitive_emissions",
+      "scope": "SCOPE_1",
+      "status": "CONFIRMED",
+      "confirmed_source_identity": true,
+      "process": {"process_id": "90000000-0000-4000-8000-000000000022", "name": "Cold storage"},
+      "equipment": {"equipment_id": "90000000-0000-4000-8000-000000000023", "name": "Cold room refrigeration system", "equipment_type": "COLD_ROOM"},
+      "activity_records": [{
+        "activity_record_id": "90000000-0000-4000-8000-000000000037",
+        "quantity": "18",
+        "unit": "kg",
+        "normalized_quantity": "18",
+        "normalized_unit": "kg"
+      }],
+      "baseline_emissions_kgco2e": "25740",
+      "contribution_percentage": "8.33",
+      "calculated_line_count": 1,
+      "recommendation_eligible": true
+    },
+    {
+      "source_id": "90000000-0000-4000-8000-000000000038",
+      "source_key": "downstream_transportation",
+      "source_name": "Downstream transportation and distribution",
+      "source_category": "transportation_distribution",
+      "scope": "SCOPE_3",
+      "status": "CONFIRMED",
+      "confirmed_source_identity": true,
+      "activity_records": [{
+        "activity_record_id": "90000000-0000-4000-8000-000000000039",
+        "quantity": "96000",
+        "unit": "tonne_km",
+        "normalized_quantity": "96000",
+        "normalized_unit": "tonne_km"
+      }],
+      "baseline_emissions_kgco2e": "9600",
+      "contribution_percentage": "3.11",
+      "calculated_line_count": 1,
+      "recommendation_eligible": true
+    },
+    {
+      "source_id": "90000000-0000-4000-8000-000000000040",
+      "source_key": "waste_generated_in_operations",
+      "source_name": "Organic waste generated in operations",
+      "source_category": "waste",
+      "scope": "SCOPE_3",
+      "status": "MISSING_INFORMATION",
+      "confirmed_source_identity": false,
+      "activity_records": [],
+      "baseline_emissions_kgco2e": "0",
+      "contribution_percentage": "0",
+      "calculated_line_count": 0,
+      "recommendation_eligible": false
+    }
+  ],
+  "baseline_emissions_kgco2e": "308715",
+  "scope_totals_kgco2e": {"SCOPE_1": "59240", "SCOPE_2": "124875", "SCOPE_3": "114600"},
+  "category_totals_kgco2e": {},
+  "source_ranking": {},
+  "unquantified_sources": ["90000000-0000-4000-8000-000000000040"],
+  "warnings": ["Organic waste source requires route confirmation."],
+  "completeness_percentage": "83.33",
+  "methodology": {
+    "layer1_methodology_version": "deterministic-decimal-v1",
+    "factor_set_version": "2026.1-demo",
+    "calculation_run_id": "90000000-0000-4000-8000-000000000050"
+  },
+  "business_constraints": {
+    "status": "CAPTURED_IN_LAYER_1",
+    "budget": {"amount": "250000", "currency": "INR"},
+    "target_payback_months": 24,
+    "max_shutdown_hours": 8,
+    "operational_constraints": ["No production shutdown longer than 8 hours"]
+  },
+  "finalization": {
+    "finalized_at": "2026-09-13T10:00:00+00:00",
+    "finalized_by": "synthetic-demo"
+  }
+}

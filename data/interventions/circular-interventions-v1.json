@@ -1,0 +1,146 @@
+{
+  "catalog_id": "circular-interventions-v1",
+  "catalog_version": "1.0.0",
+  "status": "MVP_RULE_CATALOG",
+  "warning": "Phase 1 provides explainable candidates only. It does not estimate reductions, costs, savings or payback.",
+  "interventions": [
+    {
+      "intervention_id": "CI-001",
+      "name": "Organic by-product recovery and anaerobic digestion",
+      "short_description": "Divert suitable organic waste from disposal into biogas and digestate recovery.",
+      "intervention_type": "WASTE_TO_RESOURCE",
+      "circularity_dimension": "RECOVER",
+      "target_source_keys": ["waste_generated_in_operations"],
+      "target_source_categories": ["waste"],
+      "target_equipment_types": [],
+      "required_conditions": ["Organic waste composition and current treatment route must be verified.", "A compliant digestion or offtake partner must be available."],
+      "required_evidence": ["waste_manifest", "treatment_route", "composition_or_mass_balance"],
+      "priority": 90,
+      "impact_model": {
+        "avoided_emissions_fraction": "0.35",
+        "new_intervention_emissions_fraction": "0.03",
+        "implementation_cost_inr": "300000",
+        "annual_operating_cost_inr": "18000",
+        "annual_avoided_cost_inr": "60000",
+        "circularity_score": "96",
+        "technical_feasibility_score": "55",
+        "shutdown_hours_required": "24"
+      }
+    },
+    {
+      "intervention_id": "CI-002",
+      "name": "Packaging reduction, reuse and recycled-content sourcing",
+      "short_description": "Reduce virgin packaging demand through lightweighting, returnable formats and verified recycled content.",
+      "intervention_type": "MATERIAL_CIRCULARITY",
+      "circularity_dimension": "REDUCE_REUSE_RECYCLE",
+      "target_source_keys": ["purchased_materials"],
+      "target_source_categories": ["purchased_goods_services"],
+      "target_equipment_types": [],
+      "required_conditions": ["Packaging material composition and supplier recycled content must be verified.", "Product and food-contact requirements must remain compliant."],
+      "required_evidence": ["material_register", "supplier_specification", "packaging_weight_per_product"],
+      "priority": 85,
+      "impact_model": {
+        "avoided_emissions_fraction": "0.18",
+        "new_intervention_emissions_fraction": "0.01",
+        "implementation_cost_inr": "180000",
+        "annual_operating_cost_inr": "12000",
+        "annual_avoided_cost_inr": "110000",
+        "circularity_score": "92",
+        "technical_feasibility_score": "72",
+        "shutdown_hours_required": "4"
+      }
+    },
+    {
+      "intervention_id": "CI-003",
+      "name": "Refrigerant leak prevention and low-GWP replacement",
+      "short_description": "Use leak detection, recovery and a verified lower-impact refrigerant route during servicing or replacement.",
+      "intervention_type": "FUGITIVE_EMISSIONS_CONTROL",
+      "circularity_dimension": "EXTEND_RECOVER",
+      "target_source_keys": ["refrigerant_fugitive_emissions"],
+      "target_source_categories": ["fugitive_emissions"],
+      "target_equipment_types": ["COLD_ROOM", "REFRIGERATION", "CHILLER"],
+      "required_conditions": ["Refrigerant type, charge and service history must be confirmed.", "Replacement must be compatible with the equipment and applicable safety rules."],
+      "required_evidence": ["refrigerant_register", "service_records", "leak_test_records"],
+      "priority": 88,
+      "impact_model": {
+        "avoided_emissions_fraction": "0.45",
+        "new_intervention_emissions_fraction": "0.01",
+        "implementation_cost_inr": "95000",
+        "annual_operating_cost_inr": "8000",
+        "annual_avoided_cost_inr": "60000",
+        "circularity_score": "70",
+        "technical_feasibility_score": "86",
+        "shutdown_hours_required": "2"
+      }
+    },
+    {
+      "intervention_id": "CI-004",
+      "name": "Boiler heat recovery and circular fuel substitution",
+      "short_description": "Recover usable heat and evaluate a verified waste-derived or renewable fuel route for process heat.",
+      "intervention_type": "PROCESS_ENERGY_CIRCULARITY",
+      "circularity_dimension": "RECOVER_SUBSTITUTE",
+      "target_source_keys": ["stationary_fuel_combustion"],
+      "target_source_categories": ["stationary_combustion"],
+      "target_equipment_types": ["BOILER", "FURNACE", "THERMAL_PROCESS"],
+      "required_conditions": ["Fuel quality, boiler compatibility and emissions controls must be assessed.", "Heat demand and recoverable waste-heat temperatures must be measured."],
+      "required_evidence": ["fuel_consumption_records", "equipment_specification", "heat_demand_or_temperature_survey"],
+      "priority": 92,
+      "impact_model": {
+        "avoided_emissions_fraction": "0.25",
+        "new_intervention_emissions_fraction": "0.04",
+        "implementation_cost_inr": "240000",
+        "annual_operating_cost_inr": "30000",
+        "annual_avoided_cost_inr": "120000",
+        "circularity_score": "84",
+        "technical_feasibility_score": "68",
+        "shutdown_hours_required": "8"
+      }
+    },
+    {
+      "intervention_id": "CI-005",
+      "name": "Purchased electricity efficiency and renewable supply",
+      "short_description": "Reduce grid demand through efficient equipment and evaluate on-site or contracted renewable electricity.",
+      "intervention_type": "ENERGY_DECARBONIZATION",
+      "circularity_dimension": "REDUCE_REGENERATE",
+      "target_source_keys": ["purchased_grid_electricity"],
+      "target_source_categories": ["purchased_energy", "electricity"],
+      "target_equipment_types": [],
+      "required_conditions": ["Major electrical loads and operating hours must be measured.", "Renewable supply claims must use an appropriate accounting boundary."],
+      "required_evidence": ["utility_bills", "load_inventory", "renewable_supply_option"],
+      "priority": 78,
+      "impact_model": {
+        "avoided_emissions_fraction": "0.20",
+        "new_intervention_emissions_fraction": "0.00",
+        "implementation_cost_inr": "175000",
+        "annual_operating_cost_inr": "5000",
+        "annual_avoided_cost_inr": "100000",
+        "circularity_score": "65",
+        "technical_feasibility_score": "80",
+        "shutdown_hours_required": "2"
+      }
+    },
+    {
+      "intervention_id": "CI-006",
+      "name": "Transport load consolidation and return logistics",
+      "short_description": "Improve load factors and create return routes for packaging, pallets or reusable transport assets.",
+      "intervention_type": "LOGISTICS_CIRCULARITY",
+      "circularity_dimension": "REUSE_OPTIMIZE",
+      "target_source_keys": ["upstream_transportation", "downstream_transportation"],
+      "target_source_categories": ["transportation_distribution"],
+      "target_equipment_types": [],
+      "required_conditions": ["Shipment lanes, payloads, distances and empty-return rates must be verified.", "Reusable asset ownership and hygiene requirements must be defined."],
+      "required_evidence": ["dispatch_log", "route_register", "payload_and_return_data"],
+      "priority": 70,
+      "impact_model": {
+        "avoided_emissions_fraction": "0.15",
+        "new_intervention_emissions_fraction": "0.01",
+        "implementation_cost_inr": "80000",
+        "annual_operating_cost_inr": "6000",
+        "annual_avoided_cost_inr": "60000",
+        "circularity_score": "78",
+        "technical_feasibility_score": "76",
+        "shutdown_hours_required": "0"
+      }
+    }
+  ]
+}
