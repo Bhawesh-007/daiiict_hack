@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 from typing import Annotated
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import delete, select
@@ -106,7 +106,9 @@ async def load_industry_template(
     await db.execute(delete(ProcessStep).where(ProcessStep.assessment_id == assessment_id))
 
     for proc in processes_data:
+        step_id = uuid4()
         step = ProcessStep(
+            id=step_id,
             assessment_id=assessment_id,
             name=proc.get("name", "Unnamed process"),
             sequence=proc.get("sequence", 10),
@@ -119,40 +121,49 @@ async def load_industry_template(
         equipment_types = proc.get("typical_equipment_types", [])
         for eq_type in equipment_types:
             eq_name = eq_type.replace("_", " ").title()
+            is_combustion = any(c in eq_type for c in ["boiler", "generator", "heater", "oven", "furnace", "dryer", "fryer"])
+            fuel = "diesel" if is_combustion else None
             eq = Equipment(
-                process_step_id=step.id,
+                id=uuid4(),
+                process_step_id=step_id,
                 name=eq_name,
                 equipment_type=eq_type,
-                fuel_type=None,
-                energy_type="electricity" if "electric" in eq_type or "pump" in eq_type else "fuel",
+                fuel_type=fuel,
+                energy_type="fuel" if fuel else ("electricity" if "electric" in eq_type or "pump" in eq_type else "other"),
             )
             db.add(eq)
 
         # Add suggested inputs & outputs defaults
         inputs = proc.get("typical_input_types", [])
         for inp in inputs:
+            is_electricity = "electricity" in inp
+            category = "electricity" if is_electricity else ("fuel" if any(f in inp for f in ["diesel", "gas", "fuel", "biomass", "coal"]) else "material")
+            item_name = "purchased_grid_electricity" if is_electricity else inp
             flow = InputOutputFlow(
-                process_step_id=step.id,
+                id=uuid4(),
+                process_step_id=step_id,
                 direction="INPUT",
-                category="input",
-                item_name=inp.replace("_", " ").title(),
-                unit="unit",
+                category=category,
+                item_name=item_name,
+                unit="kWh" if is_electricity else "kg",
             )
             db.add(flow)
 
         outputs = proc.get("typical_output_types", [])
         for outp in outputs:
             flow = InputOutputFlow(
-                process_step_id=step.id,
+                id=uuid4(),
+                process_step_id=step_id,
                 direction="OUTPUT",
-                category="output",
-                item_name=outp.replace("_", " ").title(),
-                unit="unit",
+                category="waste" if "waste" in outp or "release" in outp else "product",
+                item_name=outp,
+                unit="kg",
             )
             db.add(flow)
 
     await db.flush()
     return await get_assessment_processes(assessment_id, db)
+
 
 
 @router.put("/assessments/{assessment_id}/processes", response_model=list[ProcessStepResponse])

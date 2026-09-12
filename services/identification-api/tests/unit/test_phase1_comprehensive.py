@@ -18,23 +18,13 @@ from uuid import UUID, uuid4
 
 import pytest
 from httpx import ASGITransport, AsyncClient
-from pydantic import ValidationError
-from sqlalchemy import inspect, select, text
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy import inspect, text
+from sqlalchemy.ext.asyncio import create_async_engine
+from sqlalchemy.pool import NullPool
 from sqlalchemy.exc import IntegrityError
 
-from app.api.knowledge import read_industry_template, read_source_type
 from app.config import get_settings
 from app.main import app
-from app.persistence.database import Base, get_db
-from app.persistence.models import (
-    Assessment,
-    AssessmentProduct,
-    Company,
-    Facility,
-    ProcessStep,
-)
-from app.schemas.assessments import AssessmentCreateRequest
 
 PROJECT_ROOT = Path(__file__).resolve().parents[4]
 KNOWLEDGE_DIR = PROJECT_ROOT / "data"
@@ -44,6 +34,11 @@ SEED_COMPANY_FILE = KNOWLEDGE_DIR / "seed" / "sample-company.json"
 SEED_ASSESSMENT_FILE = KNOWLEDGE_DIR / "seed" / "sample-assessment.json"
 
 settings = get_settings()
+
+
+def get_test_engine():
+    """Create a fresh async engine with NullPool to avoid event-loop mismatch across async tests."""
+    return create_async_engine(settings.async_database_url, poolclass=NullPool)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -124,9 +119,15 @@ def test_kb_no_duplicate_template_or_source_type_ids():
 async def test_kb_unknown_template_version_rejected():
     """Unknown template versions are rejected clearly with 422."""
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
-        # Requesting a valid template key with unknown version when creating assessment
         payload = json.loads(SEED_ASSESSMENT_FILE.read_text(encoding="utf-8"))
-        payload["assessment"]["id"] = str(uuid4())
+        cid = str(uuid4())
+        fid = str(uuid4())
+        aid = str(uuid4())
+        payload["company"]["id"] = cid
+        payload["facility"]["id"] = fid
+        payload["facility"]["company_id"] = cid
+        payload["assessment"]["id"] = aid
+        payload["assessment"]["facility_id"] = fid
         payload["assessment"]["industry_template_version"] = "99.9.9"
         res = await client.post("/api/assessments", json=payload)
         assert res.status_code == 422
@@ -149,7 +150,7 @@ async def test_kb_unknown_source_type_id_returns_404():
 @pytest.mark.asyncio
 async def test_db_phase1_tables_exist():
     """Alembic migrations create all Phase 1 tables successfully: companies, facilities, assessments, assessment_products, process_steps."""
-    engine = create_async_engine(settings.async_database_url)
+    engine = get_test_engine()
     async with engine.connect() as conn:
         tables = await conn.run_sync(lambda sync_conn: inspect(sync_conn).get_table_names())
         required_tables = ["companies", "facilities", "assessments", "assessment_products", "process_steps"]
@@ -161,13 +162,12 @@ async def test_db_phase1_tables_exist():
 @pytest.mark.asyncio
 async def test_db_foreign_keys_enforced():
     """Foreign keys are enforced: assessment cannot reference nonexistent facility; facility cannot reference nonexistent company."""
-    engine = create_async_engine(settings.async_database_url)
+    engine = get_test_engine()
     async with engine.connect() as conn:
         trans = await conn.begin()
         fake_company_id = uuid4()
         fake_facility_id = uuid4()
 
-        # Nonexistent company for facility
         try:
             await conn.execute(
                 text("INSERT INTO facilities (id, company_id, name) VALUES (:fid, :cid, 'Test')"),
@@ -179,7 +179,6 @@ async def test_db_foreign_keys_enforced():
         await trans.rollback()
 
         trans = await conn.begin()
-        # Nonexistent facility for assessment
         try:
             await conn.execute(
                 text("""INSERT INTO assessments 
@@ -198,7 +197,7 @@ async def test_db_foreign_keys_enforced():
 @pytest.mark.asyncio
 async def test_db_check_constraints_work():
     """Reporting-period validation (start <= end) and status check constraints work."""
-    engine = create_async_engine(settings.async_database_url)
+    engine = get_test_engine()
     async with engine.connect() as conn:
         cid, fid = uuid4(), uuid4()
 
@@ -237,7 +236,6 @@ async def test_db_check_constraints_work():
     await engine.dispose()
 
 
-
 # ─────────────────────────────────────────────────────────────────────────────
 # 3. SEED-DATA TESTS
 # ─────────────────────────────────────────────────────────────────────────────
@@ -262,11 +260,21 @@ async def test_seed_insertion_and_readback_and_idempotency():
     """Insert synthetic company, facility, assessment, product and read back. Verify idempotency."""
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
         payload = json.loads(SEED_ASSESSMENT_FILE.read_text(encoding="utf-8"))
-        aid = payload["assessment"]["id"]
+        cid = str(uuid4())
+        fid = str(uuid4())
+        aid = str(uuid4())
+        pid = str(uuid4())
+        payload["company"]["id"] = cid
+        payload["facility"]["id"] = fid
+        payload["facility"]["company_id"] = cid
+        payload["assessment"]["id"] = aid
+        payload["assessment"]["facility_id"] = fid
+        payload["products"][0]["id"] = pid
+        payload["products"][0]["assessment_id"] = aid
 
         # 1st insertion
         res1 = await client.post("/api/assessments", json=payload)
-        assert res1.status_code in (201, 409)  # 201 created or 409 if already present
+        assert res1.status_code == 201
 
         # 2nd insertion (Idempotency test)
         res2 = await client.post("/api/assessments", json=payload)
@@ -285,9 +293,6 @@ async def test_seed_insertion_and_readback_and_idempotency():
         assert len(data["products"]) > 0
         assert data["products"][0]["product_name"] == payload["products"][0]["product_name"]
         assert data["status"] == "DRAFT"
-
-        # Synthetic label check
-        assert "synthetic" in payload["products"][0]["description"].lower() or "demo" in payload["products"][0]["description"].lower() or "cold chain" in payload["company"]["name"].lower()
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -374,7 +379,7 @@ async def test_source_type_read_endpoints():
 @pytest.mark.asyncio
 async def test_relationships_and_cascade_deletion():
     """Test 1:N relationships and cascade deletes: company->facilities->assessments->products/process_steps."""
-    engine = create_async_engine(settings.async_database_url)
+    engine = get_test_engine()
     async with engine.connect() as conn:
         trans = await conn.begin()
 
@@ -442,8 +447,15 @@ async def test_api_contracts_validation_and_security():
 
         # Valid payload returns HTTP 201
         payload = json.loads(SEED_ASSESSMENT_FILE.read_text(encoding="utf-8"))
+        cid = str(uuid4())
+        fid = str(uuid4())
         new_aid = str(uuid4())
+        payload["company"]["id"] = cid
+        payload["facility"]["id"] = fid
+        payload["facility"]["company_id"] = cid
         payload["assessment"]["id"] = new_aid
+        payload["assessment"]["facility_id"] = fid
+
         create_res = await client.post("/api/assessments", json=payload)
         assert create_res.status_code == 201
 

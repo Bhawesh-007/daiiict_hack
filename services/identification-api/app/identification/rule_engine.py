@@ -15,6 +15,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from app.identification.candidate_merger import candidate_key
+
 PROJECT_ROOT = Path(__file__).resolve().parents[4]
 DEFAULT_RULES_PATH = (
     PROJECT_ROOT / "data" / "rules" / "source-identification-rules.json"
@@ -261,13 +263,15 @@ class RuleEngine:
                 ]
                 process_id = _context_value(fact.process_step_id)
                 equipment_id = _context_value(fact.equipment_id)
-                candidate_key = ":".join(
-                    part or "-"
-                    for part in (source_key, process_id, equipment_id, fact.fact_type)
-                )
+                generated_candidate = {
+                    "source_key": source_key,
+                    "process_step_id": process_id,
+                    "equipment_id": equipment_id,
+                    "value_chain_position": fact.values.get("value_chain_position"),
+                }
                 candidates.append(
                     {
-                        "candidate_key": candidate_key,
+                        "candidate_key": candidate_key(generated_candidate),
                         "source_key": source_key,
                         "source_name": source.get("name", source_key),
                         "source_category": source.get("family_id"),
