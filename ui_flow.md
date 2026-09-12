@@ -3,19 +3,25 @@
 This document defines the prototype navigation. Users interact with labelled buttons; the UI calls the REST APIs in the sequence below.
 
 ```mermaid
-flowchart TD
-  A[Welcome / Assessment] -->|Load assessment| B[Company & Facility]
-  B -->|Load industry template| C[Process map]
-  C -->|Save processes| C1[Save equipment and flows]
-  C1 -->|Run identification| D[Source suggestions]
-  D -->|Review each suggestion| E[Reviewed source inventory]
-  E -->|Upload CSV/PDF activity| F[Activity data]
-  F -->|Prepare factors| G[Emission factors]
-  G -->|Run calculation| H[Emissions profile and charts]
-  H -->|Open hotspots/latest profile| H
+flowchart LR
+  A[GET /api/assessments/{id}] --> B[POST /api/assessments/{id}/load-template]
+  B --> C[GET /api/assessments/{id}/processes]
+  C --> D[PUT /api/assessments/{id}/processes]
+  D --> E[PUT /api/processes/{process_id}/equipment]
+  E --> F[PUT /api/processes/{process_id}/flows]
+  F --> G[POST /api/assessments/{id}/identify]
+  G --> H[GET /api/assessments/{id}/candidates]
+  H --> I[POST /api/assessments/{id}/candidates/{candidate_id}/review]
+  I --> J[GET /api/assessments/{id}/inventory]
+  J --> K[POST /api/assessments/{id}/import-activity-file]
+  K --> L[POST /api/emission-factors/seed-demo]
+  L --> M[POST /api/assessments/{id}/calculate]
+  M --> N[GET /api/assessments/{id}/latest-profile]
+  N --> O[GET /api/assessments/{id}/hotspots]
+  O --> P[GET /api/calculations/{calculation_id}]
+  P -. review or update inputs .-> D
 
-  A -. prototype shortcut .-> X[Ingest CSV and calculate]
-  X --> H
+  X[POST /api/assessments/{id}/ingest-and-calculate-csv] --> N
 ```
 
 ## Screen-to-API mapping
