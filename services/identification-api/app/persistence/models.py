@@ -128,6 +128,7 @@ class Assessment(Base):
     reporting_period_end = Column(DateTime(timezone=True), nullable=False)
     organizational_boundary = Column(String(100), nullable=True)
     operational_boundary = Column(String(100), nullable=True)
+    business_constraints = Column(JSONB, nullable=True)
     status = Column(String(20), nullable=False, server_default="DRAFT")
     created_at = _ts_created()
     updated_at = _ts_updated()

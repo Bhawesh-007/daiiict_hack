@@ -24,6 +24,13 @@ type CalculationResponse = {
   lines: Array<{ id: string; emissions_kgco2e: string; source_category?: string; scope?: string }>;
 };
 
+type FinalProfileResponse = {
+  profile_id: string;
+  profile_version: number;
+  baseline_emissions_kgco2e: string;
+  profile_status: string;
+};
+
 function Metric({ label, value, note }: { label: string; value: string; note?: string }) {
   return <div className="metric"><span>{label}</span><strong>{value}</strong>{note && <small>{note}</small>}</div>;
 }
@@ -43,6 +50,7 @@ function PieChart({ title, items }: { title: string; items: Array<{ key: string;
 export default function CalculationsPage() {
   const [assessmentId, setAssessmentId] = useState("10000000-0000-4000-8000-000000000003");
   const [result, setResult] = useState<CalculationResponse | null>(null);
+  const [profile, setProfile] = useState<FinalProfileResponse | null>(null);
   const [message, setMessage] = useState("");
 
   async function calculate() {
@@ -54,6 +62,17 @@ export default function CalculationsPage() {
       setMessage("Calculation complete. This is a quantified prototype result.");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Calculation could not be completed.");
+    }
+  }
+
+  async function finalize() {
+    setMessage("Finalizing the Layer 1 profile…");
+    try {
+      const response = await api<FinalProfileResponse>(`/api/assessments/${assessmentId}/finalize`, { method: "POST" });
+      setProfile(response);
+      setMessage(`Layer 1 profile finalized as version ${response.profile_version}.`);
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "The Layer 1 profile could not be finalized.");
     }
   }
 
@@ -69,7 +88,7 @@ export default function CalculationsPage() {
       <section className="metrics"><Metric label="Total quantified emissions" value={`${Number(result.total_emissions_kgco2e).toLocaleString()} kgCO₂e`} note={summary?.total_status === "PARTIAL" ? "Partial total" : "Complete quantified total"} /><Metric label="Calculated lines" value={String(summary?.quantified_line_count ?? result.lines.length)} /><Metric label="Source hotspots" value={String(summary?.by_source?.length ?? 0)} /><Metric label="Run status" value={result.status} /></section>
       <section className="chart-grid"><div className="card"><PieChart title="Emissions by source" items={sources} /></div><div className="card"><PieChart title="Emissions by scope" items={summary?.by_scope ?? []} /></div><div className="card"><PieChart title="Emissions by category" items={summary?.by_category ?? []} /></div><div className="card"><PieChart title="Emissions by process" items={summary?.by_process ?? []} /></div></section>
       <section className="card insight"><div><p className="eyebrow">INSIGHT</p><h2>Where to focus first</h2><p>{sources[0] ? `${sources[0].label || sources[0].key} is the largest quantified source at ${Number(sources[0].percentage).toFixed(1)}% of the current total.` : "Add confirmed activity data to reveal the largest quantified sources."}</p></div><div className="insight-mark">↗</div></section>
-      <section className="card result-footer"><h2>What needs attention</h2>{(summary?.total_status === "PARTIAL" || (result.summary as Summary & { unquantified_sources?: string[] })?.unquantified_sources?.length) ? <p className="warning-text">Some sources remain unquantified. Review the activity and factor gaps before treating the ranking as complete.</p> : <p className="success-text">All available confirmed activity lines were calculated successfully.</p>}<p className="run-id">Run ID: {result.calculation_run_id}</p></section>
+      <section className="card result-footer"><h2>What needs attention</h2>{(summary?.total_status === "PARTIAL" || (result.summary as Summary & { unquantified_sources?: string[] })?.unquantified_sources?.length) ? <p className="warning-text">Some sources remain unquantified. Review the activity and factor gaps before treating the ranking as complete.</p> : <p className="success-text">All available confirmed activity lines were calculated successfully.</p>}<p className="run-id">Run ID: {result.calculation_run_id}</p><button onClick={finalize}>Finalize Layer 1 profile</button>{profile && <p className="success-text">Profile {profile.profile_id} · version {profile.profile_version} is ready for Layer 2.</p>}</section>
     </>}
   </main>;
 }

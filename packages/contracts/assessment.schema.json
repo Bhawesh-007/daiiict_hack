@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://emissionlens.local/contracts/assessment-v1.json",
+  "title": "Layer 1 Assessment",
+  "type": "object",
+  "required": ["assessment", "company", "facility", "products"],
+  "properties": {
+    "company": { "type": "object", "required": ["id", "name"], "properties": { "id": { "type": "string", "format": "uuid" }, "name": { "type": "string", "minLength": 1 }, "msme_category": { "type": ["string", "null"] }, "address": { "type": ["string", "null"] } } },
+    "facility": { "type": "object", "required": ["id", "company_id", "name"], "properties": { "id": { "type": "string", "format": "uuid" }, "company_id": { "type": "string", "format": "uuid" }, "name": { "type": "string", "minLength": 1 }, "location": { "type": ["string", "null"] }, "country": { "type": ["string", "null"] } } },
+    "assessment": { "type": "object", "required": ["id", "facility_id", "industry_name", "reporting_period_start", "reporting_period_end"], "properties": { "id": { "type": "string", "format": "uuid" }, "facility_id": { "type": "string", "format": "uuid" }, "industry_name": { "type": "string", "minLength": 1 }, "industry_code": { "type": ["string", "null"] }, "industry_template_key": { "type": ["string", "null"] }, "industry_template_version": { "type": ["string", "null"] }, "reporting_period_start": { "type": "string", "format": "date-time" }, "reporting_period_end": { "type": "string", "format": "date-time" }, "status": { "type": ["string", "null"] } } },
+    "products": { "type": "array", "items": { "type": "object", "required": ["product_name"], "properties": { "id": { "type": "string", "format": "uuid" }, "product_name": { "type": "string", "minLength": 1 }, "quantity": { "type": ["number", "string", "null"] }, "unit": { "type": ["string", "null"] } } } }
+  }
+}

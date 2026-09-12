@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://emissionlens.local/contracts/calculation-v1.json",
+  "title": "Layer 1 Calculation Run",
+  "type": "object",
+  "required": ["calculation_run_id", "assessment_id", "status", "total_emissions_kgco2e", "summary", "lines"],
+  "properties": {
+    "calculation_run_id": { "type": "string", "format": "uuid" },
+    "assessment_id": { "type": "string", "format": "uuid" },
+    "status": { "type": "string", "enum": ["COMPLETED", "PARTIAL", "EMPTY", "FAILED"] },
+    "methodology_version": { "type": ["string", "null"] },
+    "factor_set_version": { "type": ["string", "null"] },
+    "total_emissions_kgco2e": { "type": "string" },
+    "total_emissions_tco2e": { "type": "string" },
+    "summary": { "type": "object" },
+    "lines": { "type": "array", "items": { "type": "object", "required": ["emissions_kgco2e"], "properties": { "source_inventory_item_id": { "type": ["string", "null"] }, "activity_record_id": { "type": ["string", "null"] }, "emission_factor_id": { "type": ["string", "null"] }, "original_quantity": { "type": ["string", "null"] }, "normalized_quantity": { "type": ["string", "null"] }, "factor_value_snapshot": { "type": ["string", "null"] }, "emissions_kgco2e": { "type": "string" } } } }
+  }
+}

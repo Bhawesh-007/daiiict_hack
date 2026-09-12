@@ -31,6 +31,19 @@ def test_request_rejects_mismatched_facility_reference() -> None:
         AssessmentCreateRequest.model_validate(payload)
 
 
+def test_business_constraints_are_optional_layer1_input() -> None:
+    payload = json.loads(SAMPLE_ASSESSMENT.read_text(encoding="utf-8"))
+    payload["assessment"]["business_constraints"] = {
+        "budget": {"amount": "250000", "currency": "INR"},
+        "operational_constraints": ["No production shutdown longer than 8 hours"],
+        "target_payback_months": 24,
+    }
+
+    request = AssessmentCreateRequest.model_validate(payload)
+
+    assert request.assessment.business_constraints["target_payback_months"] == 24
+
+
 @pytest.mark.asyncio
 async def test_knowledge_endpoints_read_template_and_source_type() -> None:
     template = await read_industry_template("industry-food-processing-v1")
@@ -47,3 +60,20 @@ def test_openapi_exposes_phase_one_routes() -> None:
     assert "/api/assessments/{assessment_id}" in paths
     assert "/api/industry-templates/{template_id}" in paths
     assert "/api/source-types/{source_type_id}" in paths
+    assert "/api/assessments/{assessment_id}/finalize" in paths
+    assert "/api/assessments/{assessment_id}/latest-final-profile" in paths
+    assert "/api/final-profiles/{profile_id}" in paths
+
+
+def test_shared_layer_one_contracts_are_present_and_versioned() -> None:
+    contracts = PROJECT_ROOT / "packages" / "contracts"
+    for filename, required_id in (
+        ("assessment.schema.json", "assessment-v1"),
+        ("source.schema.json", "source-v1"),
+        ("calculation.schema.json", "calculation-v1"),
+        ("final-profile.schema.json", "layer1-final-profile-v1"),
+    ):
+        document = json.loads((contracts / filename).read_text(encoding="utf-8"))
+        assert document["$id"].endswith(required_id + ".json")
+        assert document["type"] == "object"
+        assert document["required"]

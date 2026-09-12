@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://emissionlens.local/contracts/layer1-final-profile-v1.json",
+  "title": "Layer 1 Final Profile",
+  "description": "Immutable, versioned Layer 1 output consumed by Layer 2 recommendation services.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "profile_id",
+    "profile_version",
+    "assessment_id",
+    "profile_status",
+    "company",
+    "industry",
+    "facility",
+    "products",
+    "processes",
+    "sources",
+    "baseline_emissions_kgco2e",
+    "scope_totals_kgco2e",
+    "category_totals_kgco2e",
+    "source_ranking",
+    "methodology",
+    "business_constraints"
+  ],
+  "properties": {
+    "schema_version": { "const": "layer1-final-profile-v1" },
+    "profile_id": { "type": "string", "format": "uuid" },
+    "profile_version": { "type": "integer", "minimum": 1 },
+    "assessment_id": { "type": "string", "format": "uuid" },
+    "profile_status": { "const": "FINALIZED" },
+    "company": { "type": "object" },
+    "industry": { "type": "object" },
+    "facility": { "type": "object" },
+    "products": { "type": "array" },
+    "reporting_period": { "type": "object" },
+    "boundaries": { "type": "object" },
+    "processes": { "type": "array" },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "source_key",
+          "source_name",
+          "status",
+          "confirmed_source_identity",
+          "activity_records",
+          "baseline_emissions_kgco2e",
+          "contribution_percentage",
+          "recommendation_eligible"
+        ]
+      }
+    },
+    "baseline_emissions_kgco2e": { "type": "string" },
+    "scope_totals_kgco2e": { "type": "object" },
+    "category_totals_kgco2e": { "type": "object" },
+    "source_ranking": { "type": "object" },
+    "unquantified_sources": { "type": "array" },
+    "warnings": { "type": "array" },
+    "completeness_percentage": { "type": "string" },
+    "methodology": {
+      "type": "object",
+      "required": ["layer1_methodology_version", "factor_set_version", "calculation_run_id"]
+    },
+    "business_constraints": {
+      "type": "object",
+      "description": "Constraints collected by Layer 1, or an explicit unavailable marker."
+    },
+    "finalization": { "type": "object" }
+  }
+}

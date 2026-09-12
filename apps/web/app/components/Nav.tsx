@@ -7,6 +7,7 @@ export default function Nav() {
       <Link href="/workflow">Workflow</Link>
       <Link href="/">Activity data</Link>
       <Link href="/calculations">Calculations</Link>
+      <Link href="/recommendations">Recommendations</Link>
     </div>
   </nav>;
 }

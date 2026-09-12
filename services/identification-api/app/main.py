@@ -11,6 +11,8 @@ from app.api.factors import router as factors_router
 from app.api.identification import router as identification_router
 from app.api.knowledge import router as knowledge_router
 from app.api.processes import router as processes_router
+from app.api.profiles import router as profiles_router
+from app.api.recommendations import router as recommendations_router
 from app.config import get_settings
 
 settings = get_settings()
@@ -38,6 +40,8 @@ app.include_router(processes_router)
 app.include_router(identification_router)
 app.include_router(factors_router)
 app.include_router(calculations_router)
+app.include_router(profiles_router)
+app.include_router(recommendations_router)
 
 
 @app.get("/health")

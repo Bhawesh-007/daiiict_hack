@@ -49,6 +49,7 @@ CREATE TABLE assessments (
     reporting_period_end TIMESTAMP WITH TIME ZONE NOT NULL, 
     organizational_boundary VARCHAR(100), 
     operational_boundary VARCHAR(100), 
+    business_constraints JSONB,
     status VARCHAR(20) DEFAULT 'DRAFT' NOT NULL, 
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL, 
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL, 
@@ -383,4 +384,3 @@ GROUP BY cr.assessment_id, cr.id, si.source_name, si.source_category, si.scope, 
 UPDATE alembic_version SET version_num='0007' WHERE alembic_version.version_num = '0006';
 
 COMMIT;
-
