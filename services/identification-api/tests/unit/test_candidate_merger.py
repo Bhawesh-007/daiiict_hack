@@ -2,7 +2,7 @@ from random import Random
 
 import pytest
 
-from app.identification.candidate_merger import candidate_key, merge_candidates
+from app.identification.candidate_merger import candidate_key, group_candidates_by_source, merge_candidates
 
 
 def _candidate(origin: str, reason: str, rule_id: str | None = None) -> dict:
@@ -83,3 +83,13 @@ def test_merge_is_deterministic_and_does_not_merge_different_contexts() -> None:
 def test_merge_rejects_missing_source_type() -> None:
     with pytest.raises(ValueError, match="source_key"):
         merge_candidates([{"origin": "RULE", "reason": "missing source"}])
+
+
+def test_group_candidates_by_source_merges_contexts_into_one_actionable_category() -> None:
+    first = _candidate("RULE", "Boiler uses diesel.", "SRC-RULE-003")
+    second = {**_candidate("TEMPLATE", "Fryer is present."), "equipment_id": "equipment-2"}
+    grouped = group_candidates_by_source([first, second])
+    assert len(grouped) == 1
+    assert grouped[0]["source_key"] == "stationary_fuel_combustion"
+    assert grouped[0]["evidence_json"]["candidate_count"] == 2
+    assert len(grouped[0]["evidence_json"]["evidence"]) == 2

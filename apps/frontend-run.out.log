@@ -1,0 +1,28 @@
+
+> web@0.1.0 dev
+> next dev -p 3000 -H 127.0.0.1
+
+  ▲ Next.js 14.2.35
+  - Local:        http://127.0.0.1:3000
+  - Network:      http://127.0.0.1:3000
+
+ ✓ Starting...
+ ✓ Ready in 3.5s
+ ○ Compiling / ...
+ ✓ Compiled / in 3.9s (509 modules)
+ GET / 200 in 4144ms
+ GET / 200 in 81ms
+ GET / 200 in 54ms
+ GET / 200 in 58ms
+ ○ Compiling /template ...
+ ✓ Compiled /template in 1020ms (501 modules)
+ ○ Compiling /processes ...
+ ✓ Compiled /processes in 810ms (507 modules)
+ ○ Compiling /workflow ...
+ ✓ Compiled /workflow in 822ms (513 modules)
+ ✓ Compiled in 1227ms (513 modules)
+ ✓ Compiled in 1340ms (527 modules)
+ ✓ Compiled in 1289ms (513 modules)
+ ✓ Compiled in 767ms (527 modules)
+ ✓ Compiled in 952ms (513 modules)
+[?25h

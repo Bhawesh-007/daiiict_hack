@@ -8,7 +8,7 @@ from uuid import UUID, uuid4
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from app.schemas.enums import ChecklistStatus
-from app.schemas.knowledge import is_known_source_type, universal_source_type_ids
+from app.schemas.knowledge import is_known_source_type
 
 
 class ChecklistItemContract(BaseModel):
@@ -47,16 +47,10 @@ class ChecklistResponse(BaseModel):
     items: list[ChecklistItemContract] = Field(min_length=1)
 
     @model_validator(mode="after")
-    def require_complete_universal_coverage(self) -> ChecklistResponse:
+    def validate_filtered_coverage(self) -> ChecklistResponse:
         item_keys = [item.source_key for item in self.items]
         if len(item_keys) != len(set(item_keys)):
             raise ValueError("checklist must contain only one item per source_key")
-        expected = universal_source_type_ids()
-        missing = sorted(expected - set(item_keys))
-        if missing:
-            raise ValueError(
-                "checklist is missing universal source types: " + ", ".join(missing)
-            )
         if any(item.assessment_id != self.assessment_id for item in self.items):
             raise ValueError(
                 "all checklist items must belong to the response assessment"

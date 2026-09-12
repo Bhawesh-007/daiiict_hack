@@ -178,4 +178,81 @@ def merge_candidates(candidates: Iterable[Mapping[str, Any]]) -> list[dict[str, 
     return merged
 
 
-__all__ = ["candidate_key", "merge_candidates"]
+def group_candidates_by_source(candidates: Iterable[Any]) -> list[dict[str, Any]]:
+    """Collapse context-level proposals into one record per canonical source type.
+
+    ``merge_candidates`` intentionally preserves process/equipment context for
+    auditability. This second pass is the source-inventory boundary: all those
+    contexts become evidence on one source record, never duplicate suggestions.
+    """
+    groups: dict[str, list[Any]] = {}
+    for candidate in candidates:
+        key = _text(candidate.get("source_key")) if isinstance(candidate, Mapping) else _text(getattr(candidate, "source_key", None))
+        if key:
+            groups.setdefault(key, []).append(candidate)
+
+    grouped: list[dict[str, Any]] = []
+    for source_key in sorted(groups):
+        rows = groups[source_key]
+
+        def field(row: Any, name: str, default: Any = None) -> Any:
+            return row.get(name, default) if isinstance(row, Mapping) else getattr(row, name, default)
+
+        # Prefer an active proposal as the actionable representative. Historical
+        # PROMOTED/DISMISSED rows still remain in evidence but do not become the
+        # row the UI asks the reviewer to act on.
+        active = [row for row in rows if str(field(row, "status", "")).upper() not in {"PROMOTED", "DISMISSED"}]
+        representative = (active or rows)[-1]
+        evidence: list[dict[str, Any]] = []
+        seen: set[str] = set()
+        origins: set[str] = set()
+        reasons: list[str] = []
+        rule_ids: set[str] = set()
+        for row in rows:
+            origin = _text(field(row, "origin")) or "UNKNOWN"
+            origins.add(origin)
+            reason = _text(field(row, "reason"))
+            marker = json.dumps({"origin": origin, "reason": reason, "process_step_id": _jsonable(field(row, "process_step_id")), "equipment_id": _jsonable(field(row, "equipment_id"))}, sort_keys=True)
+            if marker in seen:
+                continue
+            seen.add(marker)
+            if reason and reason not in reasons:
+                reasons.append(reason)
+            nested = field(row, "evidence_json") or {}
+            for rule_id in nested.get("rule_ids", []) if isinstance(nested, Mapping) else []:
+                rule_ids.add(str(rule_id))
+            evidence.append({
+                "candidate_id": str(field(row, "id")) if field(row, "id") else None,
+                "origin": origin,
+                "process_step_id": _jsonable(field(row, "process_step_id")),
+                "equipment_id": _jsonable(field(row, "equipment_id")),
+                "reason": reason,
+                "evidence": _jsonable(nested),
+            })
+        grouped.append({
+            "id": field(representative, "id"),
+            "assessment_id": field(representative, "assessment_id"),
+            "identification_run_id": field(representative, "identification_run_id"),
+            "process_step_id": field(representative, "process_step_id"),
+            "equipment_id": field(representative, "equipment_id"),
+            "source_key": source_key,
+            "source_name": field(representative, "source_name") or source_key,
+            "source_category": field(representative, "source_category"),
+            "suggested_scope": field(representative, "suggested_scope"),
+            "origin": sorted(origins, key=lambda origin: _origin_sort_key(origin))[-1],
+            "reason": "; ".join(reasons) if reasons else None,
+            "confidence": max((float(field(row, "confidence")) for row in rows if field(row, "confidence") is not None), default=None),
+            "status": field(representative, "status", "PROPOSED"),
+            "evidence_json": {
+                "grouped_by": "source_key",
+                "candidate_count": len(rows),
+                "active_candidate_count": len(active),
+                "origins": sorted(origins, key=lambda origin: _origin_sort_key(origin)),
+                "rule_ids": sorted(rule_ids),
+                "evidence": evidence,
+            },
+        })
+    return grouped
+
+
+__all__ = ["candidate_key", "group_candidates_by_source", "merge_candidates"]
