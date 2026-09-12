@@ -80,9 +80,12 @@ class SourceCandidatesResponse(BaseModel):
 
 
 class SourceInventoryContract(SourceModel):
+    model_config = ConfigDict(
+        from_attributes=True, extra="forbid", str_strip_whitespace=True
+    )
     id: UUID = Field(default_factory=uuid4)
     assessment_id: UUID
-    candidate_id: UUID
+    candidate_id: UUID | None = None
     process_step_id: UUID | None = None
     equipment_id: UUID | None = None
     scope: str | None = Field(default=None, max_length=50)

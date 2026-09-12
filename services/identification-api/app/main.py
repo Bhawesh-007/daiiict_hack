@@ -3,8 +3,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.activities import router as activities_router
 from app.api.assessments import router as assessments_router
+from app.api.calculations import router as calculations_router
 from app.api.companies import router as companies_router
+from app.api.factors import router as factors_router
 from app.api.identification import router as identification_router
 from app.api.knowledge import router as knowledge_router
 from app.api.processes import router as processes_router
@@ -28,10 +31,13 @@ app.add_middleware(
 )
 
 app.include_router(companies_router)
+app.include_router(activities_router)
 app.include_router(assessments_router)
 app.include_router(knowledge_router)
 app.include_router(processes_router)
 app.include_router(identification_router)
+app.include_router(factors_router)
+app.include_router(calculations_router)
 
 
 @app.get("/health")

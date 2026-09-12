@@ -44,6 +44,14 @@ For each sufficiently strong match it returns:
 
 All model candidates use origin `ML` and are persisted as `PROPOSED`. The model never confirms a source.
 
+Before candidate merging or persistence, `MLPersistenceCandidate` validates the taxonomy source key, confidence range, non-empty reason, model identity/version and evidence. Its status is a literal `PROPOSED`, so `CONFIRMED` and every other model-supplied status are rejected.
+
+## Strict API contracts
+
+The Pydantic contracts are defined in `services/identification-api/app/schemas/ml.py`. Inputs reject unknown fields, unsupported fact types, empty text and more than 500 facts. Outputs reject unknown taxonomy source keys, confidence outside 0–1, and missing reasons or model metadata.
+
+The canonical output field is `follow_up_questions`. The accidental spelling `follow_up_questions_questions` is accepted only as an input alias for compatibility.
+
 ## Pipeline role
 
 ```text

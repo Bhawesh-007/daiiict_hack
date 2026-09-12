@@ -1,0 +1,8 @@
+source_key,quantity,unit_code,period_start,period_end,evidence_reference,notes
+purchased_grid_electricity,185000,kWh,2025-04-01,2026-03-31,utility-bill-apr2025-mar2026.pdf,Annual purchased electricity from utility bills
+stationary_fuel_combustion,12500,litre,2025-04-01,2026-03-31,diesel-logbook-2025-26.csv,Diesel consumed by boiler and backup generator
+refrigerant_fugitive_emissions,18,kg,2025-04-01,2026-03-31,cold-room-service-record.pdf,R-134a refrigerant added during maintenance; demo treats refill as release
+purchased_materials,42000,kg,2025-04-01,2026-03-31,packaging-purchase-register.csv,Mixed plastic packaging purchased for finished products
+purchased_materials,18000,kg,2025-04-01,2026-03-31,packaging-purchase-register.csv,Cardboard packaging purchased for finished products
+waste_generated_in_operations,26000,kg,2025-04-01,2026-03-31,waste-manifest-2025-26.pdf,Organic waste sent to landfill in the demonstration dataset
+downstream_transportation,96000,tonne_km,2025-04-01,2026-03-31,dispatch-log-2025-26.csv,Third-party road freight for customer deliveries

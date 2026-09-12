@@ -14,6 +14,27 @@ MODEL_VERSION = "1.0.0"
 TOKEN_RE = re.compile(r"[a-z][a-z0-9_]+")
 STOPWORDS = {"and", "the", "for", "from", "with", "this", "that", "type", "activity", "reporting", "period"}
 
+# Deterministic vocabulary used for structured entity extraction.  A provider
+# or fine-tuned model can replace this implementation without changing the
+# adapter contract.
+ENTITY_PATTERNS: dict[str, tuple[tuple[str, str], ...]] = {
+    "process": (("raw material receipt", "raw_material_receipt"), ("thermal processing", "thermal_processing"), ("wet processing", "wet_processing"), ("wastewater treatment", "wastewater_treatment"), ("waste treatment", "waste_treatment"), ("manufacturing", "manufacturing"), ("production", "production"), ("packaging", "packaging"), ("storage", "storage"), ("dispatch", "dispatch"), ("dyeing", "dyeing"), ("finishing", "finishing")),
+    "equipment": (("steam generator", "steam_generator"), ("thermic fluid heater", "thermic_fluid_heater"), ("diesel generator", "diesel_generator"), ("refrigeration system", "refrigeration_system"), ("air conditioner", "air_conditioner"), ("cold room", "cold_room"), ("heat pump", "heat_pump"), ("boiler", "boiler"), ("furnace", "furnace"), ("oven", "oven"), ("fryer", "fryer"), ("dryer", "dryer"), ("stenter", "stenter"), ("kiln", "kiln"), ("generator", "generator"), ("chiller", "chiller"), ("chilling unit", "chilling_unit"), ("compressor", "compressor"), ("pump", "pump")),
+    "fuel": (("natural gas", "natural_gas"), ("furnace oil", "furnace_oil"), ("diesel", "diesel"), ("petrol", "petrol"), ("gasoline", "petrol"), ("lpg", "lpg"), ("biomass", "biomass"), ("coal", "coal"), ("fuel oil", "fuel_oil")),
+    "energy": (("purchased grid electricity", "purchased_grid_electricity"), ("grid electricity", "purchased_grid_electricity"), ("purchased electricity", "purchased_grid_electricity"), ("electricity", "electricity"), ("purchased heat", "purchased_heat"), ("purchased steam", "purchased_steam"), ("purchased cooling", "purchased_cooling"), ("solar power", "solar_power")),
+    "refrigerant": (("r134a", "R134a"), ("r404a", "R404A"), ("r410a", "R410A"), ("r32", "R32"), ("r22", "R22"), ("refrigerant", "refrigerant"), ("hfc", "HFC"), ("pfc", "PFC")),
+    "material": (("raw material", "raw_material"), ("packaging material", "packaging_material"), ("packaging", "packaging"), ("chemical", "chemical"), ("chemicals", "chemical"), ("steel", "steel"), ("flour", "flour"), ("milk", "milk"), ("cotton", "cotton"), ("polyester", "polyester")),
+    "waste": (("solid waste", "solid_waste"), ("food waste", "food_waste"), ("hazardous waste", "hazardous_waste"), ("waste", "waste"), ("sludge", "sludge")),
+    "wastewater": (("wastewater", "wastewater"), ("effluent", "effluent"), ("sewage", "sewage")),
+    "transportation": (("third party transport", "third_party_transport"), ("transportation", "transportation"), ("transport", "transport"), ("logistics", "logistics"), ("freight", "freight"), ("truck", "truck"), ("vehicle", "vehicle"), ("shipping", "shipping")),
+    "outsourced_activity": (("contract manufacturing", "contract_manufacturing"), ("contract processing", "contract_processing"), ("outsourced manufacturing", "outsourced_manufacturing"), ("outsourced processing", "outsourced_processing"), ("third party", "third_party_activity"), ("outsourced", "outsourced_activity")),
+}
+SEED_PHRASES = {
+    "stationary_fuel_combustion": ["diesel boiler generator furnace oven heater burner"],
+    "refrigerant_fugitive_emissions": ["cold room cold storage chiller freezer refrigeration ammonia cooling"],
+    "purchased_grid_electricity": ["electricity bill grid power meter purchased electricity"],
+}
+
 
 def _tokens(value: Any) -> list[str]:
     text = str(value or "").lower().replace("_", " ")
@@ -33,6 +54,7 @@ class SourceIdentificationModel:
             family = families.get(source.get("family_id"), {})
             values = [source.get("name"), source.get("scope_rule"), family.get("name"), family.get("description")]
             values.extend(source.get("aliases", []))
+            values.extend(SEED_PHRASES.get(key, []))
             profiles[key] = _tokens(" ".join(str(value or "") for value in values))
         document_frequency = Counter(token for values in profiles.values() for token in set(values))
         size = max(len(profiles), 1)
@@ -58,3 +80,30 @@ class SourceIdentificationModel:
             for score, key in sorted(scores, reverse=True)[:top_k]
         ]
 
+    def extract_entities(self, text: str) -> list[dict[str, Any]]:
+        """Extract normalized process, equipment and activity entities."""
+        text_value = str(text or "")
+        lowered = text_value.lower()
+        matches: list[tuple[int, str, str, str]] = []
+        for entity_type, patterns in ENTITY_PATTERNS.items():
+            for phrase, normalized_value in patterns:
+                start = lowered.find(phrase)
+                if start >= 0:
+                    matches.append((start, entity_type, phrase, normalized_value))
+        entities: list[dict[str, Any]] = []
+        seen: set[tuple[str, str]] = set()
+        for start, entity_type, phrase, normalized_value in sorted(matches):
+            identity = (entity_type, normalized_value)
+            if identity in seen:
+                continue
+            seen.add(identity)
+            entities.append({
+                "entity_type": entity_type,
+                "value": phrase,
+                "normalized_value": normalized_value,
+                "confidence": 0.95,
+                "evidence_text": text_value[max(0, start - 40): start + len(phrase) + 40].strip(),
+                "model_id": MODEL_ID,
+                "model_version": MODEL_VERSION,
+            })
+        return entities
