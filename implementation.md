@@ -918,14 +918,46 @@ Exit condition: A seeded assessment, template and source type can be stored and 
 
 ### Phase 2 — Process and identification
 
-1. Build company/facility form.
-2. Build process and equipment mapper.
-3. Implement the rule engine.
-4. Implement candidate merge and deduplication.
-5. Add universal checklist.
-6. Add source review statuses.
+Phase 2 starts from the Phase 1 assessment, template and knowledge-read APIs. Its goal is to turn that assessment into a persisted, user-reviewed source inventory. ML, activity quantification and emissions calculations remain out of scope.
 
-Exit condition: The sample profile produces a reviewed source inventory without ML.
+1. Define and validate Phase 2 contracts for process steps, equipment, input/output flows, source candidates, checklist items and source-inventory items.
+2. Build the company/facility and process-mapping screens on top of the Phase 1 assessment record.
+3. Load the selected industry template into an assessment as editable process suggestions; never treat template entries as confirmed facts.
+4. Implement process and equipment persistence:
+   - Save ordered process steps.
+   - Save equipment attached to a process.
+   - Save energy, fuel, material, waste, wastewater and transport flows.
+   - Validate that referenced processes and equipment belong to the assessment.
+5. Implement the deterministic rule engine using `data/rules/source-identification-rules.json`:
+   - Evaluate normalized process, equipment and flow facts.
+   - Create explained `POTENTIAL` candidates only.
+   - Store rule ID, rule version, reason, provisional scope and follow-up questions.
+6. Implement the identification-run service and endpoint:
+   - Create a versioned identification run.
+   - Execute template and rule origins.
+   - Continue successfully when ML is unavailable.
+   - Store the run result and generated candidates.
+7. Implement candidate merge and deduplication:
+   - Use a deterministic key based on source type, process and equipment context.
+   - Merge template, rule, checklist and user origins.
+   - Preserve every triggering reason and rule version.
+   - Make repeated identification runs idempotent for the same input snapshot.
+8. Materialize the universal checklist for every assessment:
+   - Ensure every universal source family appears.
+   - Mark unobserved families as `MISSING_INFORMATION`, not zero.
+   - Keep outsourced activities visible as value-chain candidates.
+9. Implement source review and inventory promotion:
+   - Allow `CONFIRMED`, `POTENTIAL`, `MISSING_INFORMATION`, `NOT_APPLICABLE` and `OUTSOURCED`.
+   - Require a reason for `NOT_APPLICABLE`.
+   - Record reviewer, timestamp and confirmation note.
+   - Promote reviewed candidates into `source_inventory_items` without deleting their candidate history.
+10. Add Phase 2 read endpoints and tests:
+    - Read process, equipment and flow mappings.
+    - Read candidates and checklist state.
+    - Update source status.
+    - Verify rule triggers, non-triggers, deduplication, ownership boundaries and ML-free fallback.
+
+Exit condition: The seeded food-processing assessment can load and edit its template, persist processes/equipment/flows, run deterministic identification without ML, produce deduplicated explained candidates, show a complete universal checklist, and return a persisted reviewed source inventory.
 
 ### Phase 3 — ML assistance
 
